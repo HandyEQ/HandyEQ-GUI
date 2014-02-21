@@ -26,6 +26,53 @@ Rectangle {
             y: 0
             width: parent.width
             height: parent.height-logoContainer.height
+
+            ListView {
+                id: menuList
+                x: 0
+                y: 0
+                width: menuContainer.width
+                height: menuContainer.height
+                delegate: Item {
+                    id: item1
+                    width: menuList.width
+                    height: menuList.height
+                    Rectangle {
+                        id: rectangle1
+                        x: 0
+                        y:0
+                        width: parent.width
+                        height: 40
+                        Text {
+                            text: name
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            font.family: "Trebuchet MS"
+                            font.bold: true
+                            font.pointSize: 16
+                            styleColor: "#b1b1b1"
+                            style: Text.Outline
+                        }
+                    }
+                }
+                model: ListModel {
+                    ListElement {
+                        name: "Owerview"
+                    }
+
+                    ListElement {
+                        name: "Delay"
+                    }
+
+                    ListElement {
+                        name: "Echo"
+                    }
+
+                    ListElement {
+                        name: "Chourus"
+                    }
+                }
+            }
         }
 
         Item {
@@ -34,6 +81,15 @@ Rectangle {
             y: menuContainer.height
             width: parent.width
             height: 140
+
+            Image {
+                id: image1
+                x: 0
+                y: 0
+                width: 140
+                height: 140
+                source: "qrc:/qtquickplugin/images/template_image.png"
+            }
         }
     }
 
