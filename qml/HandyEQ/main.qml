@@ -11,6 +11,16 @@ Rectangle {
         y: 0
         width: parent.width
         height: 100
+
+        Text {
+            id: applicationName
+            x: 8
+            y: 8
+            text: qsTr("HandyEQ")
+            font.bold: true
+            font.pointSize: 30
+            font.family: "Courier"
+        }
     }
 
     Item {
@@ -27,49 +37,86 @@ Rectangle {
             width: parent.width
             height: parent.height-logoContainer.height
 
-            ListView {
-                id: menuList
-                x: 0
-                y: 0
-                width: menuContainer.width
-                height: menuContainer.height
-                delegate: Item {
-                    id: item1
-                    width: menuList.width
-                    height: menuList.height
-                    Rectangle {
-                        id: rectangle1
-                        x: 0
-                        y:0
-                        width: parent.width
-                        height: 40
-                        Text {
-                            text: name
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            font.family: "Trebuchet MS"
-                            font.bold: true
-                            font.pointSize: 16
-                            styleColor: "#b1b1b1"
-                            style: Text.Outline
+            Column{
+                width: parent.width
+                Rectangle {
+                    id: mainButtonContainer
+                    height: 40
+                    width: parent.width
+                    radius: 20
+                    Text {
+                        id: mainButtonText
+                        anchors.centerIn: parent
+                        text: "Main"
+                    }
+                    MouseArea {
+                        hoverEnabled: true
+                        anchors.fill: parent
+                        onEntered: {
+                            mainButtonContainer.color = "gray"
+                        }
+                        onExited: {
+                            mainButtonContainer.color = "white"
                         }
                     }
                 }
-                model: ListModel {
-                    ListElement {
-                        name: "Owerview"
+                Rectangle {
+                    id: delayButtonContainer
+                    height: 40
+                    width: parent.width
+                    radius: 20
+                    Text {
+                        anchors.centerIn: parent
+                        text: "Delay"
+                    }
+                    MouseArea {
+                        hoverEnabled: true
+                        anchors.fill: parent
+                        onEntered: {
+                            delayButtonContainer.color = "gray"
+                        }
+                        onExited: {
+                            delayButtonContainer.color = "white"
+                        }
+                    }
+                }
+                Rectangle {
+                    height: 40
+                    width: parent.width
+                    radius: 20
+                    Text {
+                        anchors.centerIn: parent
+                        text: "Echo"
+                    }
+                    MouseArea {
+                        hoverEnabled: true
+                        anchors.fill: parent
+                        onEntered: {
+                            parent.color = "gray"
+                        }
+                        onExited: {
+                            parent.color = "white"
+                        }
+                    }
+                }
+                Rectangle {
+                    height: 40;
+                    width: parent.width
+                    radius: 20
+                    Text {
+                        anchors.centerIn: parent
+                        text: "Chourus"
                     }
 
-                    ListElement {
-                        name: "Delay"
-                    }
-
-                    ListElement {
-                        name: "Echo"
-                    }
-
-                    ListElement {
-                        name: "Chourus"
+                    MouseArea {
+                        hoverEnabled: true
+                        anchors.fill: parent
+                        onEntered: {
+                            parent.color = "gray"
+                        }
+                        onExited: {
+                            parent.color = "white"
+                        }
                     }
                 }
             }
