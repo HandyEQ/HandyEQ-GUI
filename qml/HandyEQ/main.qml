@@ -11,6 +11,32 @@ Rectangle {
         y: 0
         width: parent.width
         height: 100
+
+        Rectangle {
+            id: rectangle2
+            color: "#ffffff"
+            radius: 1
+            opacity: 1
+            z: 10
+            border.width: 1
+            anchors.fill: parent
+
+            Text {
+                id: text1
+                x: 270
+                y: 20
+                width: 260
+                height: 61
+                text: "HandyEQ"
+                wrapMode: Text.NoWrap
+                verticalAlignment: Text.AlignTop
+                font.strikeout: false
+                font.bold: false
+                font.family: "Arial"
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: 44
+            }
+        }
     }
 
     Item {
@@ -20,33 +46,50 @@ Rectangle {
         width: 140
         height: 400
 
+
         Item {
             id: menuContainer
-            x: 0
-            y: 0
-            width: parent.width
-            height: parent.height-logoContainer.height
+            height: 260
+            anchors.bottomMargin: 140
+            transformOrigin: Item.Center
+            anchors.fill: parent
 
             ListView {
                 id: menuList
-                x: 0
-                y: 0
-                width: menuContainer.width
-                height: menuContainer.height
+                width: 140
+                height: 260
+                interactive: true
+                keyNavigationWraps: false
+                highlightRangeMode: ItemView.StrictlyEnforceRange
+                snapMode: ListView.SnapToRow
+                visible: true
+                opacity: 1
+                clip: true
+                spacing: 0
+                cacheBuffer: 20
+                flickDeceleration: 1000
+                maximumFlickVelocity: 1000
+                boundsBehavior: Flickable.StopAtBounds
+                orientation: ListView.Vertical
+                flickableDirection: Flickable.AutoFlickDirection
+                contentHeight: 65
                 delegate: Item {
                     id: item1
                     width: menuList.width
-                    height: menuList.height
+                    height: 65
                     Rectangle {
-                        id: rectangle1
+                        id: meny1
                         x: 0
-                        y:0
-                        width: parent.width
-                        height: 40
+                        y: 0
+                        width: 140
+                        height: 65
+                        radius: 1
                         Text {
+                            width: 87
+                            height: 30
                             text: name
-                            anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
                             font.family: "Trebuchet MS"
                             font.bold: true
                             font.pointSize: 16
@@ -74,13 +117,13 @@ Rectangle {
                 }
             }
         }
-
         Item {
             id: logoContainer
             x: 0
-            y: menuContainer.height
-            width: parent.width
+            y: 260
             height: 140
+            anchors.topMargin: 258
+            anchors.fill: parent
 
             Image {
                 id: image1
@@ -108,5 +151,6 @@ Rectangle {
         width: parent.width-containerLeft.width-containerLeft.width
         height: parent.height-containerTop.height
     }
+
 
 }
