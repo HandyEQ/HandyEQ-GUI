@@ -1,4 +1,5 @@
-import QtQuick 2.0
+import QtQuick 2.1
+import QtQuick.Controls 1.0
 
 Rectangle {
     id: baseWindow
@@ -43,7 +44,7 @@ Rectangle {
                     id: mainButtonContainer
                     height: 40
                     width: parent.width
-                    radius: 20
+                    radius: 10
                     Text {
                         id: mainButtonText
                         anchors.centerIn: parent
@@ -51,13 +52,7 @@ Rectangle {
                     }
                     MouseArea {
                         hoverEnabled: true
-                        anchors.fill: parent
-                        onEntered: {
-                            mainButtonContainer.color = "gray"
-                        }
-                        onExited: {
-                            mainButtonContainer.color = "white"
-                        }
+                        anchors.fill: mainButtonContainer
                     }
                 }
                 Rectangle {
@@ -72,15 +67,10 @@ Rectangle {
                     MouseArea {
                         hoverEnabled: true
                         anchors.fill: parent
-                        onEntered: {
-                            delayButtonContainer.color = "gray"
-                        }
-                        onExited: {
-                            delayButtonContainer.color = "white"
-                        }
                     }
                 }
                 Rectangle {
+                    id: echoButtonContainer
                     height: 40
                     width: parent.width
                     radius: 20
@@ -91,15 +81,10 @@ Rectangle {
                     MouseArea {
                         hoverEnabled: true
                         anchors.fill: parent
-                        onEntered: {
-                            parent.color = "gray"
-                        }
-                        onExited: {
-                            parent.color = "white"
-                        }
                     }
                 }
                 Rectangle {
+                    id: chourusButtonContainer
                     height: 40;
                     width: parent.width
                     radius: 20
@@ -111,12 +96,6 @@ Rectangle {
                     MouseArea {
                         hoverEnabled: true
                         anchors.fill: parent
-                        onEntered: {
-                            parent.color = "gray"
-                        }
-                        onExited: {
-                            parent.color = "white"
-                        }
                     }
                 }
             }
