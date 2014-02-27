@@ -1,5 +1,6 @@
 import QtQuick 2.0
 
+
 Rectangle {
     id: baseWindow
     width: 800
@@ -28,6 +29,8 @@ Rectangle {
                 width: 260
                 height: 61
                 text: "HandyEQ"
+                anchors.horizontalCenterOffset: -250
+                anchors.horizontalCenter: parent.horizontalCenter
                 wrapMode: Text.NoWrap
                 verticalAlignment: Text.AlignTop
                 font.strikeout: false
@@ -92,7 +95,7 @@ Rectangle {
                             anchors.verticalCenter: parent.verticalCenter
                             font.family: "Trebuchet MS"
                             font.bold: true
-                            font.pointSize: 16
+                            font.pointSize: 14
                             styleColor: "#b1b1b1"
                             style: Text.Outline
                         }
@@ -100,7 +103,7 @@ Rectangle {
                 }
                 model: ListModel {
                     ListElement {
-                        name: "Owerview"
+                        name: "Overview"
                     }
 
                     ListElement {
@@ -150,6 +153,24 @@ Rectangle {
         y: containerTop.height
         width: parent.width-containerLeft.width-containerLeft.width
         height: parent.height-containerTop.height
+        my_fileio {
+            id     : myFile
+            fileS  : "in.txt"
+            onError: consol.log(msg)
+        }
+        //Skriver till fil med myFile.write("text");
+        //Läser från fil med text = myFile.read(); och får då alla rader med innehåll.
+        Text {
+            id: text2
+            x: 160
+            y: 180
+            width: 200
+            height: 40
+            text: qsTr("Text")
+            font.pixelSize: 12
+        }
+
+
     }
 
 
