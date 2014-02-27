@@ -6,11 +6,11 @@
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+
     QtQuick2ApplicationViewer viewer;
-    qmlRegisterType<my_fileio>("my_fileio", 1, 0, "my_fileio");
+    qmlRegisterType<my_fileio, 1>("my_fileio", 1, 0, "my_fileio");
     viewer.setMainQmlFile(QStringLiteral("qml/HandyEQ/main.qml"));
     viewer.showExpanded();
 
     return app.exec();
-
 }

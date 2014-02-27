@@ -15,14 +15,14 @@ public:
     Q_INVOKABLE QString read();
     Q_INVOKABLE bool write(const QString& data);
 
-    QString source(){
+    QString fileS(){
         return mfileS;
-    };
+    }
 
 public slots:
     void setFileS(const QString& fileS){
         mfileS = fileS;
-    };
+    }
 
 signals:
     void fileSChanged(const QString& fileS);
