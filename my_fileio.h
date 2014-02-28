@@ -12,17 +12,18 @@ public:
                WRITE setFileS
                NOTIFY fileSChanged)
     explicit my_fileio(QObject *parent = 0);
+
     Q_INVOKABLE QString read();
     Q_INVOKABLE bool write(const QString& data);
 
     QString fileS(){
         return mfileS;
-    }
+    };
 
 public slots:
     void setFileS(const QString& fileS){
         mfileS = fileS;
-    }
+    };
 
 signals:
     void fileSChanged(const QString& fileS);
