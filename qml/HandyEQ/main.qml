@@ -28,7 +28,7 @@ Rectangle {
     }
 
     Item {
-        id: containerRight
+        id: containerLeft
         x: 0
         y: containerTop.height
         width: 140
@@ -125,7 +125,7 @@ Rectangle {
     }
 
     Item {
-        id: containerLeft
+        id: containerRight
         x: parent.width-containerLeft.width
         y: containerTop.height
         width: 140
@@ -143,42 +143,38 @@ Rectangle {
                 model: ListModel {
                     id: presetModel
                 }
-                delegate: Item {
-                    x: 5
+                delegate: Rectangle {
                     height: 40
+                    width: 140
+                    Text {
+                        anchors.fill: parent
+                        text: name +" "+delay
+                    }
                     MouseArea {
-                        width: 140
-                        height: 40
+                        anchors.fill: parent
                         onClicked: {
-                            var index = presetList.indexAt(mouseX, mouseY)
-                            var item = presetList.itemAt(mouseX, mouseY)
-                            var object = presetModel.get(index)
-                            console.log(index)
-                            console.log(item)
-                            console.log(object)
-                            console.log(presetList.count)
-                            delayLabel.text = qsTr("Delay:" + presetModel.get(presetList.indexAt(mouseX, mouseY)).delay + " MSEC")
-                            delaySlider.value = presetModel.get(presetList.indexAt(mouseX, mouseY)).delay
-                        }
-                        Text {
-                            width: 140
-                            height: 40
-                            text: name
+                            var delay = presetModel.get(index).delay
+                            var name = presetModel.get(index).name
+                            console.log("Index: "+index)
+                            console.log("Preset: "+name+" ,Val:"+delay)
+                            console.log("List Size: "+presetList.count+"\n")
+                            delayLabel.text = qsTr("Delay:" + delay + " MSEC")
+                            delaySlider.value = delay
                         }
                     }
                 }
             }
-            Item{
+            Item {
                 id: saveContainer
                 x: parent.height-50
-                y: parent.y
-                TextField{
+                y: parent.y               
+                TextField {
                     id: saveField
-                    x:parent.x
-                    y:parent.y
-                    width: parent.width
+                    x:saveContainer.x
+                    y:saveContainer.y
+                    width: saveContainer.width
                     height: 25
-                    text: "Save Name..."
+                    text: ""
                 }
                 Button {
                     id: saveButton
@@ -188,7 +184,8 @@ Rectangle {
                     height: 25
                     text: "Save"
                     onClicked: {
-                        presetModel.append({"name": saveField.text,"delay": +delaySlider.value.toFixed(0)})
+                        presetModel.append({"name": saveField.text,"delay": delaySlider.value.toFixed(0)})
+                        saveField.text = ""
                     }
                 }
             }
