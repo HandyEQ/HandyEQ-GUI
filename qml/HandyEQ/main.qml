@@ -3,6 +3,7 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
+import HandyEQ 1.0
 
 Rectangle {
     id: baseWindow
@@ -188,7 +189,14 @@ Rectangle {
                     height: 25
                     text: "Save"
                     onClicked: {
-                        presetModel.append({"name": saveField.text,"delay": +delaySlider.value.toFixed(0)})
+                        var newPreset = {"name": saveField.text,"delay": +delaySlider.value.toFixed(0)}
+                        presetModel.append(newPreset)
+                        fileH.write(newPreset)
+                    }
+                    FileHandeler {
+                        id: fileH
+                        source: "presets.txt"
+                        onError: console.log(msg)
                     }
                 }
             }
@@ -220,6 +228,12 @@ Rectangle {
             opacity: 0
 
         }
+    }
+
+    ToolButton {
+        id: toolButton1
+        x: 321
+        y: 186
     }
 
     states: [
