@@ -29,11 +29,10 @@ QString My_fileio::read()
     return fileContent;
 }
 
-bool My_fileio::write(const QString &data)
+bool My_fileio::write(const QString& data)
 {
-    if(mfileS.isEmpty()) {
+    if (mfileS.isEmpty())
         return false;
-    }
 
     QFile file(mfileS);
     if (!file.open(QFile::WriteOnly | QFile::Truncate))

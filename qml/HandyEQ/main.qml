@@ -174,13 +174,13 @@ Rectangle {
 
         My_fileio {
             id      : myfile
-            fileS   : "in.txt"
+            fileS   : "C:\Users\Einar\Dropbox\skola\DAT096\Project\Gui\HandyEQ-GUI\in.txt"
             onError : console.log(msg)
         }
+
         Component.onCompleted: {
-            console.log(myfile.write("hej"))
+            myfile.write("a\n b")
             text3.text = myfile.read()
-            console.log(myfile.write("då"))
             text2.text = myfile.read()
         }
 
