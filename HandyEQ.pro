@@ -8,7 +8,7 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    my_fileio.cpp
+    My_fileio.cpp
 
 # Installation path
 # target.path =
@@ -20,4 +20,4 @@ qtcAddDeployment()
 OTHER_FILES +=
 
 HEADERS += \
-    my_fileio.h
+    My_fileio.h

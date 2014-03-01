@@ -2,7 +2,7 @@
 #define MY_FILEIO_H
 #include <QObject>
 
-class my_fileio : public QObject
+class My_fileio : public QObject
 {
     Q_OBJECT
 
@@ -11,7 +11,7 @@ public:
                READ fileS
                WRITE setFileS
                NOTIFY fileSChanged)
-    explicit my_fileio(QObject *parent = 0);
+    explicit My_fileio(QObject *parent = 0);
 
     Q_INVOKABLE QString read();
     Q_INVOKABLE bool write(const QString& data);

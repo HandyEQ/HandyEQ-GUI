@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import my_fileio 1
+import My_fileio 1.0
 
 
 Rectangle {
@@ -64,7 +64,6 @@ Rectangle {
                 height: 260
                 interactive: true
                 keyNavigationWraps: false
-                snapMode: ListView.SnapToRow
                 visible: true
                 opacity: 1
                 clip: true
@@ -163,16 +162,27 @@ Rectangle {
             text: qsTr("Text")
             font.pixelSize: 12
         }
+        Text {
+            id: text3
+            x: 160
+            y: 140
+            width: 200
+            height: 40
+            text: qsTr("Text")
+            font.pixelSize: 12
+        }
 
-        my_fileio {
+        My_fileio {
             id      : myfile
             fileS   : "in.txt"
             onError : console.log(msg)
         }
-       /* Component.onCompleted: {
-            console.log(my_fileio.write("test"))
-            text2.text = my_fileio.read()
-        } */
+        Component.onCompleted: {
+            console.log(myfile.write("hej"))
+            text3.text = myfile.read()
+            console.log(myfile.write("då"))
+            text2.text = myfile.read()
+        }
 
         //Skriver till fil med myFile.write("text");
         //Läser från fil med text = myFile.read(); och får då alla rader med innehåll.

@@ -2,12 +2,12 @@
 #include <QFile>
 #include <QTextStream>
 
-my_fileio::my_fileio(QObject *parent) :
+My_fileio::My_fileio(QObject *parent) :
     QObject(parent)
 {
 }
 
-QString my_fileio::read()
+QString My_fileio::read()
 {
     if(mfileS.isEmpty()){
         emit error("The file is empty!");
@@ -29,7 +29,7 @@ QString my_fileio::read()
     return fileContent;
 }
 
-bool my_fileio::write(const QString &data)
+bool My_fileio::write(const QString &data)
 {
     if(mfileS.isEmpty()) {
         return false;
