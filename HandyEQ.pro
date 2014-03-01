@@ -17,8 +17,7 @@ SOURCES += main.cpp \
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
-OTHER_FILES += \
-    presets.txt
+OTHER_FILES +=
 
 HEADERS += \
     filehandeler.h

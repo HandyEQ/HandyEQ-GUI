@@ -1,9 +1,9 @@
 #include "filehandeler.h"
 #include <QFile>
 #include <QTextStream>
+#include <QJsonObject>
 
-FileHandeler::FileHandeler(QObject *parent) :
-    QObject(parent)
+FileHandeler::FileHandeler(QObject *parent) : QObject(parent)
 {
 
 }
@@ -33,19 +33,25 @@ QString FileHandeler::read()
     return fileContent;
 }
 
-bool FileHandeler::write(const QString& data)
+bool FileHandeler::write(const QString &data)
 {
-    if (mSource.isEmpty())
-        return false;
-
+    //Set input file
     QFile file(mSource);
-    if (!file.open(QFile::WriteOnly | QFile::Truncate))
-        return false;
-
+    //Make it a text stream
     QTextStream out(&file);
-    out << data;
 
-    file.close();
-
-    return true;
+    //check if there is a source file set and if the file is opened
+    if (mSource.isEmpty() || !file.open(QFile::ReadWrite)){
+        return false;
+    }
+    // If everything is ok then start writing to file
+    else {
+        //find end of file
+        file.seek(file.size());
+        //append new data
+        out << data;
+        //close and return sucessful save
+        file.close();
+        return true;
+    }
 }

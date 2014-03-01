@@ -72,7 +72,17 @@ Rectangle {
                     MouseArea {
                         hoverEnabled: true
                         anchors.fill: parent
-                        onClicked:{baseWindow.state = "Delay"}
+                        onClicked:{
+                            baseWindow.state = "Delay"
+                            presetModel.clear()
+                            var data = fileH.read()
+                            console.log(data)
+                            parseJson(data)
+                            function parseJson(input)
+                            {
+                                presetModel.append(input)
+                            }
+                        }
                     }
                 }
                 Rectangle {
@@ -185,19 +195,15 @@ Rectangle {
                     height: 25
                     text: "Save"
                     onClicked: {
-<<<<<<< HEAD
-                        var newPreset = {"name": saveField.text,"delay": +delaySlider.value.toFixed(0)}
+                        var newPreset = {"name": saveField.text,"delay": delaySlider.value.toFixed(0)}
                         presetModel.append(newPreset)
-                        fileH.write(newPreset)
+                        fileH.write("{name:"+saveField.text+",delay:"+delaySlider.value.toFixed(0)+"}")
+                        saveField.text = ""
                     }
                     FileHandeler {
                         id: fileH
+                        onError: console.log("Debug"+msg)
                         source: "presets.txt"
-                        onError: console.log(msg)
-=======
-                        presetModel.append({"name": saveField.text,"delay": delaySlider.value.toFixed(0)})
-                        saveField.text = ""
->>>>>>> SimpleUI
                     }
                 }
             }
