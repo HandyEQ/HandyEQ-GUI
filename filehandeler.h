@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QFile>
+#include <QJsonArray>
 
 class FileHandeler : public QObject
 {
@@ -15,8 +16,8 @@ class FileHandeler : public QObject
                    NOTIFY sourceChanged)
         explicit FileHandeler(QObject *parent = 0);
 
-        Q_INVOKABLE QString read();
-        Q_INVOKABLE bool write(const QString &data);
+        Q_INVOKABLE QJsonArray read();
+        Q_INVOKABLE bool write(const QString &name, const qint32 &value);
 
         QString source()
         {

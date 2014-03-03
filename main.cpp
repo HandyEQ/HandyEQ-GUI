@@ -2,6 +2,7 @@
 #include "qtquick2applicationviewer.h"
 #include <QtQml>
 #include "filehandeler.h"
+#include <QtQuick>
 
 //Main function
 int main(int argc, char *argv[])

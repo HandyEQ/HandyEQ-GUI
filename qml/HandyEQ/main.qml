@@ -72,16 +72,12 @@ Rectangle {
                     MouseArea {
                         hoverEnabled: true
                         anchors.fill: parent
-                        onClicked:{
+                        onClicked : {
                             baseWindow.state = "Delay"
                             presetModel.clear()
                             var data = fileH.read()
-                            console.log(data)
-                            parseJson(data)
-                            function parseJson(input)
-                            {
-                                presetModel.append(input)
-                            }
+                            presetModel.append(data)
+                            console.log("QML data content\n"+data)
                         }
                     }
                 }
@@ -152,7 +148,7 @@ Rectangle {
                 opacity: 0
                 highlightFollowsCurrentItem: true
                 model: ListModel {
-                    id: presetModel
+                    id: presetModel          
                 }
                 delegate: Rectangle {
                     height: 40
@@ -197,7 +193,7 @@ Rectangle {
                     onClicked: {
                         var newPreset = {"name": saveField.text,"delay": delaySlider.value.toFixed(0)}
                         presetModel.append(newPreset)
-                        fileH.write("{name:"+saveField.text+",delay:"+delaySlider.value.toFixed(0)+"}")
+                        fileH.write(saveField.text,delaySlider.value.toFixed(0))
                         saveField.text = ""
                     }
                     FileHandeler {
