@@ -3,6 +3,7 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
+import HandyEQ 1.0
 
 Rectangle {
     id: baseWindow
@@ -71,7 +72,13 @@ Rectangle {
                     MouseArea {
                         hoverEnabled: true
                         anchors.fill: parent
-                        onClicked:{baseWindow.state = "Delay"}
+                        onClicked : {
+                            baseWindow.state = "Delay"
+                            presetModel.clear()
+                            var data = fileH.read()
+                            presetModel.append(data)
+                            console.log("QML data content\n"+data)
+                        }
                     }
                 }
                 Rectangle {
@@ -141,7 +148,7 @@ Rectangle {
                 opacity: 0
                 highlightFollowsCurrentItem: true
                 model: ListModel {
-                    id: presetModel
+                    id: presetModel          
                 }
                 delegate: Rectangle {
                     height: 40
@@ -184,8 +191,15 @@ Rectangle {
                     height: 25
                     text: "Save"
                     onClicked: {
-                        presetModel.append({"name": saveField.text,"delay": delaySlider.value.toFixed(0)})
+                        var newPreset = {"name": saveField.text,"delay": delaySlider.value.toFixed(0)}
+                        presetModel.append(newPreset)
+                        fileH.write(saveField.text,delaySlider.value.toFixed(0))
                         saveField.text = ""
+                    }
+                    FileHandeler {
+                        id: fileH
+                        onError: console.log("Debug"+msg)
+                        source: "presets.txt"
                     }
                 }
             }
@@ -217,6 +231,12 @@ Rectangle {
             opacity: 0
 
         }
+    }
+
+    ToolButton {
+        id: toolButton1
+        x: 321
+        y: 186
     }
 
     states: [
