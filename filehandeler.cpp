@@ -1,7 +1,6 @@
 #include "filehandeler.h"
 #include <QObject>
 #include <QFile>
-#include <QTextStream>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -22,15 +21,20 @@ QJsonArray FileHandeler::read()
     if ( file.open(QFile::ReadOnly | QIODevice::Text) ) {
         //Read file
         QString data = file.readAll();
+        file.close();
+
         //Create JSONDoc from file content
         QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8());
-        qDebug() << "Reading file";
-        qDebug() << data;
-        qDebug() << "JSON Doc content";
-        qDebug() << doc.toJson();
-        file.close();
+
+        /* qDebug() << "Reading file";
+         * qDebug() << data;
+         * qDebug() << "JSON Doc content";
+         * qDebug() << doc.toJson();
+         */
+
         //Create JSONArray
         QJsonArray arr;
+
         //set JSONArray to content of JSONDoc
         arr = doc.array();
         return arr;
@@ -51,32 +55,46 @@ bool FileHandeler::write(const QString &name, const qint32 &value)
     }
     // If everything is ok then start writing to file
     else {
-        //Create JSONDoc from file content
-        QString input = file.readAll();
-        qDebug() << input;
         //Read file
+        QString input = file.readAll();
+        /*
+         * qDebug() << input;
+         */
+
         //Create JSONDoc from file content
         QJsonDocument doc = QJsonDocument::fromJson(input.toUtf8());
-        //Create JSONArray and JSONObject
+
+        //Create JSONArray and set JSONArray to content of JSONDoc
         QJsonArray arr = doc.array();
+
+        //Create JSONObject and add values
         QJsonObject obj;
-        //set JSONArray to content of JSONDoc
-        qDebug() << "Reading file";
-        qDebug() << arr.size();
-        //input values into JSONObject
         obj.insert("name",name);
         obj.insert("delay",value);
+
+        /* qDebug() << "Reading file";
+         * qDebug() << arr.size();
+         */
+
         //Append JSONObject to end of JSONArray
         arr.append(obj);
+
         //Set JSONArray to content of JSONDoc
         doc.setArray(arr);
+
         //Write data to doc
         QString output = doc.toJson();
-        qDebug() << "Output to file";
-        qDebug() << output;
+        /*
+         * qDebug() << "Output to file";
+         * qDebug() << output;
+         */
+
+        //Set writing position to SOF and write new data
+        //and then set filesize to new data size
         file.seek(0);
         file.write(output.toUtf8());
         file.resize(file.pos());
+
         //close and return sucessful save
         file.close();
         return true;

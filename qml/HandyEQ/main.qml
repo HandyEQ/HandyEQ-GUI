@@ -77,7 +77,7 @@ Rectangle {
                             presetModel.clear()
                             var data = fileH.read()
                             presetModel.append(data)
-                            console.log("QML data content\n"+data)
+                            // console.log("QML data content\n"+data)
                         }
                     }
                 }
@@ -162,9 +162,11 @@ Rectangle {
                         onClicked: {
                             var delay = presetModel.get(index).delay
                             var name = presetModel.get(index).name
-                            console.log("Index: "+index)
-                            console.log("Preset: "+name+" ,Val:"+delay)
-                            console.log("List Size: "+presetList.count+"\n")
+                            /*
+                             * console.log("Index: "+index)
+                             * console.log("Preset: "+name+" ,Val:"+delay)
+                             * console.log("List Size: "+presetList.count+"\n")
+                             */
                             delayLabel.text = qsTr("Delay:" + delay + " MSEC")
                             delaySlider.value = delay
                         }
