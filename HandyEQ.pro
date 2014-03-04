@@ -9,8 +9,7 @@ QML_IMPORT_PATH =
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     filehandeler.cpp \
-    serial.cpp \
-    serial.cpp
+    serialcom.cpp
 
 # Installation path
 # target.path =
@@ -23,6 +22,6 @@ OTHER_FILES +=
 
 HEADERS += \
     filehandeler.h \
-    serial.h
+    serialcom.h
 
 QT += serialport
