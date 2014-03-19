@@ -3,12 +3,16 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
-import HandyEQ 1.0
 
 Rectangle {
     id: baseWindow
-    width: 800
-    height: 500
+    width: 1400
+    height: 800
+
+    property int bassVal:   bass.curValue-12
+    property int midVal:    midrange.curValue-12
+    property int trebleVal: treble.curValue-12
+    property int gainVal: volume.curValue-99
 
     Item {
         id: containerTop
@@ -19,121 +23,173 @@ Rectangle {
 
         Text {
             id: applicationName
-            x: 8
-            y: 8
+            x: 6
+            y: 6
             text: qsTr("HandyEQ")
             font.bold: true
-            font.pointSize: 30
+            font.pointSize: 61
             font.family: "Courier"
         }
-    }
-
-    Item {
-        id: containerLeft
-        x: 0
-        y: containerTop.height
-        width: 140
-        height: 400
 
         Item {
-            id: menuContainer
-            x: 0
+            id: systemoverview
+            x: 400
             y: 0
-            width: parent.width
-            height: parent.height-logoContainer.height
+            width: 1000
+            height: 100
 
-            Column{
-                width: parent.width
-                Rectangle {
-                    id: mainButtonContainer
-                    height: 40
-                    width: parent.width
-                    radius: 10
-                    Text {
-                        id: mainButtonText
-                        anchors.centerIn: parent
-                        text: "Main"
-                    }
-                    MouseArea {
-                        hoverEnabled: true
-                        anchors.fill: mainButtonContainer
-                        onClicked:{baseWindow.state = "baseState"}
-                    }
-                }
-                Rectangle {
-                    id: delayButtonContainer
-                    height: 40
-                    width: parent.width
-                    radius: 20
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Delay"
-                    }
-                    MouseArea {
-                        hoverEnabled: true
-                        anchors.fill: parent
-                        onClicked : {
-                            baseWindow.state = "Delay"
-                            presetModel.clear()
-                            var data = fileH.read()
-                            presetModel.append(data)
-                            console.log("QML data content\n"+data)
-                        }
-                    }
-                }
-                Rectangle {
-                    id: echoButtonContainer
-                    height: 40
-                    width: parent.width
-                    radius: 20
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Echo"
-                    }
-                    MouseArea {
-                        hoverEnabled: true
-                        anchors.fill: parent
-                    }
-                }
-                Rectangle {
-                    id: chourusButtonContainer
-                    height: 40;
-                    width: parent.width
-                    radius: 20
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Chourus"
-                    }
+            Rectangle {
+                id: menuequalizer
+                x: 50
+                y: 10
+                width: 150
+                height: 80
+                color: "#ffffff"
+                radius: 1
+                border.width: 2
+                border.color: "#000000"
 
-                    MouseArea {
-                        hoverEnabled: true
-                        anchors.fill: parent
+                Text {
+                    id: equalizertext
+                    x: 0
+                    y: 0
+                    width: 150
+                    height: 80
+                    text: qsTr("Equalizer")
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 28
+                }
+            }
+
+
+            Rectangle {
+                id: menuvolume
+                x: 300
+                y: 10
+                width: 150
+                height: 80
+                color: "#ffffff"
+                radius: 1
+                border.width: 2
+
+                Text {
+                    id: volumetext
+                    x: 0
+                    y: 0
+                    width: 150
+                    height: 80
+                    text: qsTr("Volume ")
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 28
+                }
+            }
+
+
+            Rectangle {
+                id: menueffect1
+                x: 550
+                y: 10
+                width: 150
+                height: 80
+                color: "#ffffff"
+                radius: 1
+                border.width: 2
+
+                ExclusiveGroup{
+                    id: menu1
+                }
+
+
+                RadioButton {
+                    id: menuDelay1
+                    exclusiveGroup: menu1
+                    x: 20
+                    y: 5
+                    text: qsTr("Delay")
+                    onClicked: {
+                        effect1rec.state = "delay"
+                    }
+                }
+
+                RadioButton {
+                    id: menuchorus1
+                    exclusiveGroup: menu1
+                    x: 20
+                    y: 30
+                    text: qsTr("Chorus")
+                    onClicked: {
+                        effect1rec.state = "chorus"
+                    }
+                }
+
+                RadioButton {
+                    id: menuBase1
+                    exclusiveGroup: menu1
+                    x: 20
+                    y: 55
+                    text: qsTr("No effect")
+                    onClicked: {
+                        effect1rec.state = "base"
                     }
                 }
             }
-        }
 
-        Item {
-            id: logoContainer
-            x: 0
-            y: menuContainer.height
-            width: parent.width
-            height: 140
 
-            Image {
-                id: image1
-                x: 0
-                y: 0
-                width: 140
-                height: 140
-                source: "qrc:/qtquickplugin/images/template_image.png"
+            Rectangle {
+                id: menueffect2
+                x: 800
+                y: 10
+                width: 150
+                height: 80
+                color: "#ffffff"
+                radius: 1
+                border.width: 2
+
+                ExclusiveGroup{
+                    id: menu2
+                }
+
+                RadioButton {
+                    id: menudelay2
+                    exclusiveGroup: menu2
+                    x: 20
+                    y: 5
+                    text: qsTr("Delay")
+                    onClicked: {
+                        effect2rec.state = "delay"
+                    }
+                }
+
+                RadioButton {
+                    id: menuchorus2
+                    exclusiveGroup: menu2
+                    x: 20
+                    y: 30
+                    text: qsTr("Chorus")
+                    onClicked: {
+                        effect2rec.state = "chorus"
+                    }
+                }
+
+                RadioButton {
+                    id: menuBase2
+                    exclusiveGroup: menu2
+                    x: 20
+                    y: 55
+                    text: qsTr("No effect")
+                    onClicked: {
+                        effect2rec.state = "base"
+                    }
+                }
             }
         }
     }
 
     Item {
         id: containerRight
-        x: parent.width-containerLeft.width
+        x: 1260
         y: containerTop.height
         width: 140
         height: parent.height-containerTop.height
@@ -144,7 +200,6 @@ Rectangle {
                 x: parent.x
                 y: parent.y
                 width: 140
-                height: containerLeft.height-50
                 opacity: 0
                 highlightFollowsCurrentItem: true
                 model: ListModel {
@@ -208,32 +263,191 @@ Rectangle {
 
     Item {
         id: contentContainer
-        x: containerRight.width
+        x: 0
         y: containerTop.height
-        width: parent.width-containerLeft.width-containerLeft.width
+        width: 1260
         height: parent.height-containerTop.height
 
-        Slider {
-            id: delaySlider
-            x: 42
-            y: 249
-            opacity: 0
-            onValueChanged: {
-                delayLabel.text = qsTr("Delay:" + delaySlider.value.toFixed(0) + " MSEC")
+        Rectangle {
+            id: eqrec
+            x: 0
+            y: 0
+            width: 1060
+            height: 350
+            color: "#ffffff"
+            radius: 1
+            border.width: 1
+
+            GenericSlider{
+                id: bass
+                x: 25
+                y: 60
+                text1: "Bass"
+            }
+
+
+            GenericSlider{
+                id: midrange
+                x: 150
+                y: 60
+                text1: "Midrange"
+            }
+
+            GenericSlider{
+                id: treble
+                x: 275
+                y: 60
+                text1: "Treble"
+            }
+
+            Image {
+                id: filterimg
+                x: 400
+                y: 20
+                width: 600
+                height: 300
+                source: "qrc:/qtquickplugin/images/template_image.png"
             }
         }
 
-        Label {
-            id: delayLabel
-            x: 259
-            y: 91
-            text: qsTr("Delay:" + delaySlider.value.toFixed(0) + " MSEC")
-            opacity: 0
+        Rectangle {
+            id: effect1rec
+            x: 0
+            y: 350
+            width: 630
+            height: 350
+            color: "#ffffff"
+            radius: 1
+            border.width: 1
+            state: "base"
 
+            Text {
+                id: e1content
+                x: 310
+                y: 121
+                width: 209
+                height: 113
+                text: "No effect"
+                font.pixelSize: 12
+            }
+
+            states: [
+                State {
+                    name: "base"
+                    PropertyChanges {
+                        target: e1content; text: "No effect"
+                    }
+
+                },
+                State {
+                    name: "delay"
+                    PropertyChanges {
+                        target: e1content; text: "Delay"
+                    }
+                },
+                State {
+                    name: "chorus"
+                    PropertyChanges {
+                        target: e1content; text: "Chorus"
+                    }
+                }
+
+            ]
+        }
+
+        Rectangle {
+            id: effect2rec
+            x: 630
+            y: 350
+            width: 630
+            height: 350
+            color: "#ffffff"
+            radius: 1
+            border.width: 1
+
+            Text {
+                id: text1
+                x: 217
+                y: 201
+                text: bassVal + " " + midVal + " " + trebleVal + " " + gainVal
+                font.pixelSize: 24
+            }
+
+            Text {
+                id: e2content
+                x: 217
+                y: 35
+                width: 209
+                height: 113
+                text: "No effect"
+                font.pixelSize: 12
+            }
+
+            states: [
+                State {
+                    name: "base"
+                    PropertyChanges {
+                        target: e2content; text: "No effect"
+                    }
+
+                },
+                State {
+                    name: "delay"
+                    PropertyChanges {
+                        target: e2content; text: "Delay"
+                    }
+                },
+                State {
+                    name: "chorus"
+                    PropertyChanges {
+                        target: e2content; text: "Chorus"
+                    }
+                }
+
+            ]
+
+        }
+
+        Rectangle {
+            id: volumerec
+            x: 1060
+            y: 0
+            width: 200
+            height: 350
+            color: "#ffffff"
+            radius: 1
+            border.width: 1
+
+            GenericGainSlider{
+                id: volume
+                x: 40
+                y: 60
+                text1: "Volume"
+            }
+        }
+
+    }
+
+    /*Slider {
+        id: delaySlider
+        x: 42
+        y: 249
+        opacity: 0
+        onValueChanged: {
+            delayLabel.text = qsTr("Delay:" + delaySlider.value.toFixed(0) + " MSEC")
         }
     }
 
-    ToolButton {
+    Label {
+        id: delayLabel
+        x: 259
+        y: 91
+        text: qsTr("Delay:" + delaySlider.value.toFixed(0) + " MSEC")
+        opacity: 0
+
+    }*/
+
+    /*ToolButton {
         id: toolButton1
         x: 321
         y: 186
@@ -300,6 +514,6 @@ Rectangle {
         State {
             name: "Churus"
         }
-    ]
+    ]*/
 
 }

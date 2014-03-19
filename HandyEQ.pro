@@ -17,7 +17,10 @@ SOURCES += main.cpp \
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
-OTHER_FILES +=
+OTHER_FILES += \
+    qml/HandyEQ/GenericSlider.qml \
+    qml/HandyEQ/GenericGainSlider.qml \
+    qml/HandyEQ/Delay.qml
 
 HEADERS += \
     filehandeler.h
