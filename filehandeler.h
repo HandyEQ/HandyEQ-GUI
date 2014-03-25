@@ -13,7 +13,8 @@ class FileHandeler : public QObject
         Q_PROPERTY(QString source
                    READ source
                    WRITE setSource
-                   NOTIFY sourceChanged)
+                   NOTIFY sourceChanged
+                   DESIGNABLE true)
         explicit FileHandeler(QObject *parent = 0);
 
         Q_INVOKABLE QJsonArray read();
@@ -24,15 +25,15 @@ class FileHandeler : public QObject
             return mSource;
         }
 
+    signals:
+        void sourceChanged(const QString &source);
+        void error(const QString &msg);
+
     public slots:
         void setSource(const QString &source)
         {
             mSource = source;
         }
-
-    signals:
-        void sourceChanged(const QString &source);
-        void error(const QString &msg);
 
     private:
         QString mSource;

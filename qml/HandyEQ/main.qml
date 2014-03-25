@@ -3,7 +3,6 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
-import HandyEQ 1.0
 
 Rectangle {
     id: baseWindow
@@ -231,12 +230,6 @@ Rectangle {
             opacity: 0
 
         }
-    }
-
-    ToolButton {
-        id: toolButton1
-        x: 321
-        y: 186
     }
 
     states: [
