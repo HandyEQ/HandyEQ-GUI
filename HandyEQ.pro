@@ -8,7 +8,8 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    filehandeler.cpp
+    filehandeler.cpp \
+    serialcom.cpp
 
 # Installation path
 # target.path =
@@ -20,7 +21,12 @@ qtcAddDeployment()
 OTHER_FILES += \
     qml/HandyEQ/GenericSlider.qml \
     qml/HandyEQ/GenericGainSlider.qml \
-    qml/HandyEQ/Delay.qml
+    qml/HandyEQ/Delay.qml \
+    qml/HandyEQ/Chorus.qml \
+    qml/HandyEQ/GenericHorizontalSlider.qml \
+    qml/HandyEQ/NoEffect.qml \
+    qml/HandyEQ/Equalizer.qml
 
 HEADERS += \
-    filehandeler.h
+    filehandeler.h \
+    serialcom.h

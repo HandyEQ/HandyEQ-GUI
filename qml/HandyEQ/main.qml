@@ -9,15 +9,21 @@ Rectangle {
     width: 1400
     height: 800
 
-    property int bassVal:   bass.curValue-12
-    property int midVal:    midrange.curValue-12
-    property int trebleVal: treble.curValue-12
-    property int gainVal: volume.curValue-99
+    property int bassVal:   e1.bass
+    property int midVal:    e1.midrange
+    property int trebleVal: e1.treble
+    property int gainVal:   volume.curValue
+    property double delay1Val:    d1.curDelay
+    property double delay2Val:    d2.curDelay
+    property int chorus1Val:   c1.curChorus
+    property int chorus2Val:   c2.curChorus
+
 
     Item {
         id: containerTop
         x: 0
         y: 0
+        z: 1
         width: parent.width
         height: 100
 
@@ -27,7 +33,7 @@ Rectangle {
             y: 6
             text: qsTr("HandyEQ")
             font.bold: true
-            font.pointSize: 61
+            font.pointSize: 48
             font.family: "Courier"
         }
 
@@ -109,7 +115,7 @@ Rectangle {
                     y: 5
                     text: qsTr("Delay")
                     onClicked: {
-                        effect1rec.state = "delay"
+                        effect1rec.state = "Delay"
                     }
                 }
 
@@ -120,7 +126,7 @@ Rectangle {
                     y: 30
                     text: qsTr("Chorus")
                     onClicked: {
-                        effect1rec.state = "chorus"
+                        effect1rec.state = "Chorus"
                     }
                 }
 
@@ -131,7 +137,7 @@ Rectangle {
                     y: 55
                     text: qsTr("No effect")
                     onClicked: {
-                        effect1rec.state = "base"
+                        effect1rec.state = "No effect"
                     }
                 }
             }
@@ -158,7 +164,7 @@ Rectangle {
                     y: 5
                     text: qsTr("Delay")
                     onClicked: {
-                        effect2rec.state = "delay"
+                        effect2rec.state = "Delay"
                     }
                 }
 
@@ -169,7 +175,7 @@ Rectangle {
                     y: 30
                     text: qsTr("Chorus")
                     onClicked: {
-                        effect2rec.state = "chorus"
+                        effect2rec.state = "Chorus"
                     }
                 }
 
@@ -180,7 +186,7 @@ Rectangle {
                     y: 55
                     text: qsTr("No effect")
                     onClicked: {
-                        effect2rec.state = "base"
+                        effect2rec.state = "No effect"
                     }
                 }
             }
@@ -189,11 +195,188 @@ Rectangle {
 
     Item {
         id: containerRight
-        x: 1260
+        x: contentContainer.width
         y: containerTop.height
-        width: 140
-        height: parent.height-containerTop.height
+        width: baseWindow.width-contentContainer.width
+        height: baseWindow.height-containerTop.height
+
         Column {
+            id: column
+            x: 0
+            y: 0
+            spacing: 0
+            anchors.fill: parent
+
+            ListView {
+                id: presetList
+                x: 0
+                y: 0
+                width: containerRight.width
+                height: containerRight.height-200
+                highlightFollowsCurrentItem: true
+                model: ListModel {
+                    id: presetModel
+
+                    ListElement {
+                        name: "Grey"
+                        colorCode: "grey"
+                    }
+
+                    ListElement {
+                        name: "Red"
+                        colorCode: "red"
+                    }
+
+                    ListElement {
+                        name: "Blue"
+                        colorCode: "blue"
+                    }
+
+                    ListElement {
+                        name: "Green"
+                        colorCode: "green"
+                    }
+                }
+
+
+                delegate: Rectangle {
+                    x: 5
+                    height: 40
+                    width: presetList.width
+                    z: 0
+                    Text {
+                        text: name
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            /*var delay = presetModel.get(index).delay
+                            var name = presetModel.get(index).name
+                            console.log("Index: "+index)
+                            console.log("Preset: "+name+" ,Val:"+delay)
+                            console.log("List Size: "+presetList.count+"\n")
+                            delayLabel.text = qsTr("Delay:" + delay + " MSEC")
+                            delaySlider.value = delay*/
+
+                        }
+                    }
+                }
+            }
+
+            Item {
+                id: sendContainer
+                x: 10
+                y: containerRight.height-100
+                width: 120
+                height: 40
+
+                Button {
+                    id: sendButton
+                    x: 0
+                    y: 0
+                    width: sendContainer.width
+                    height: sendContainer.height
+                    text: qsTr("Send")
+                    onClicked: {
+                        e1.bassStart        = 5
+                        e1.midrangeStart    = 5
+                        e1.trebleStart      = 5
+                        d1.delayStartS      = 5
+                        d1.delayStartMS     = 5
+                        d2.delayStartS      = 5
+                        d2.delayStartMS     = 5
+                        volume.sValue       = 5
+                        e1.bassStart        = 5
+                        e1.midrangeStart    = 5
+                        e1.trebleStart      = 5
+                        d1.delayStartS      = 5
+                        d1.delayStartMS     = 5
+                        d2.delayStartS      = 5
+                        d2.delayStartMS     = 5
+                        volume.sValue       = 99
+                    }
+                }
+            }
+
+            Item {
+                id: resetContainer
+                x: 10
+                y: containerRight.height-150
+                width: 120
+                height: 40
+                Button {
+                    id: resetButton
+                    x: 0
+                    y: 0
+                    width: resetContainer.width
+                    height: resetContainer.height
+                    text: qsTr("Reset")
+                    onClicked: {
+                        e1.bassStart        = 3
+                        e1.midrangeStart    = 3
+                        e1.trebleStart      = 3
+                        d1.delayStartS      = 3
+                        d1.delayStartMS     = 3
+                        d2.delayStartS      = 3
+                        d2.delayStartMS     = 3
+                        volume.sValue       = 3
+                        e1.bassStart        = 0
+                        e1.midrangeStart    = 0
+                        e1.trebleStart      = 0
+                        d1.delayStartS      = 0
+                        d1.delayStartMS     = 0
+                        d2.delayStartS      = 0
+                        d2.delayStartMS     = 0
+                        volume.sValue       = 0
+                    }
+                }
+            }
+
+            Item {
+                id: saveContainer
+                x: 10
+                y: containerRight.height-100
+                width: 120
+                height: 80
+
+                Button {
+                    id: saveButton
+                    x: 0
+                    y: 0
+                    width: saveContainer.width
+                    height: saveContainer.height/2
+                    text: qsTr("Save")
+                    onClicked: {
+                        e1.bassStart        = 0
+                        e1.midrangeStart    = 0
+                        e1.trebleStart      = 0
+                        d1.delayStartS      = 1
+                        d1.delayStartMS     = 10
+                        d2.delayStartS      = 1
+                        d2.delayStartMS     = 10
+                        volume.sValue       = 50
+                    }
+                }
+
+                TextField {
+                    id: saveField
+                    x: 0
+                    y: saveContainer.height/2
+                    width: saveContainer.width
+                    height: saveContainer.height/2
+                    scale: 1
+                    font.pointSize: 18
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    placeholderText: ""
+                }
+            }
+
+
+
+        }
+        /*Column {
             anchors.fill: parent
             ListView {
                 id: presetList
@@ -258,7 +441,7 @@ Rectangle {
                     }
                 }
             }
-        }
+        }*/
     }
 
     Item {
@@ -273,40 +456,13 @@ Rectangle {
             x: 0
             y: 0
             width: 1060
-            height: 350
+            height: contentContainer.height/2
             color: "#ffffff"
             radius: 1
             border.width: 1
 
-            GenericSlider{
-                id: bass
-                x: 25
-                y: 60
-                text1: "Bass"
-            }
-
-
-            GenericSlider{
-                id: midrange
-                x: 150
-                y: 60
-                text1: "Midrange"
-            }
-
-            GenericSlider{
-                id: treble
-                x: 275
-                y: 60
-                text1: "Treble"
-            }
-
-            Image {
-                id: filterimg
-                x: 400
-                y: 20
-                width: 600
-                height: 300
-                source: "qrc:/qtquickplugin/images/template_image.png"
+            Equalizer{
+                id: e1
             }
         }
 
@@ -314,93 +470,204 @@ Rectangle {
             id: effect1rec
             x: 0
             y: 350
-            width: 630
-            height: 350
+            width: contentContainer.width/2
+            height: contentContainer.height/2
             color: "#ffffff"
             radius: 1
             border.width: 1
             state: "base"
 
-            Text {
-                id: e1content
-                x: 310
-                y: 121
-                width: 209
-                height: 113
-                text: "No effect"
-                font.pixelSize: 12
+            Delay{
+                id: d1
+                opacity: 0
+
+            }
+
+            Chorus{
+                id: c1
+                opacity: 0
+            }
+
+            NoEffect{
+                id: n1
+                opacity: 1
             }
 
             states: [
                 State {
-                    name: "base"
+                    name: "No effect"
                     PropertyChanges {
-                        target: e1content; text: "No effect"
+                        target: d1; opacity: 0
                     }
+                    PropertyChanges {
+                        target: c1; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: n1; opacity: 1
+                    }
+                    PropertyChanges {
+                        target: c1; z: 0
+                    }
+                    PropertyChanges {
+                        target: d1; z: 0
+                    }
+                    PropertyChanges {
+                        target: n1; z: 1
+                    }
+                },
+                State {
+                    name: "Delay"
+                    PropertyChanges {
+                        target: d1; opacity: 1
+                    }
+                    PropertyChanges {
+                        target: c1; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: n1; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: c1; z: 0
+                    }
+                    PropertyChanges {
+                        target: d1; z: 1
+                    }
+                    PropertyChanges {
+                        target: n1; z: 0
+                    }
+                },
+                State {
+                    name: "Chorus"
+                    PropertyChanges {
+                        target: d1; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: c1; opacity: 1
+                    }
+                    PropertyChanges {
+                        target: n1; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: c1; z: 1
+                    }
+                    PropertyChanges {
+                        target: d1; z: 0
+                    }
+                    PropertyChanges {
+                        target: n1; z: 0
 
-                },
-                State {
-                    name: "delay"
-                    PropertyChanges {
-                        target: e1content; text: "Delay"
-                    }
-                },
-                State {
-                    name: "chorus"
-                    PropertyChanges {
-                        target: e1content; text: "Chorus"
                     }
                 }
-
             ]
         }
 
         Rectangle {
             id: effect2rec
-            x: 630
-            y: 350
-            width: 630
-            height: 350
+            x: contentContainer.width/2
+            y: contentContainer.height/2
+            width: contentContainer.width/2
+            height: contentContainer.height/2
             color: "#ffffff"
             radius: 1
             border.width: 1
 
             Text {
                 id: text1
-                x: 217
-                y: 201
+                x: 270
+                y: 161
+                width: 93
+                height: 29
                 text: bassVal + " " + midVal + " " + trebleVal + " " + gainVal
                 font.pixelSize: 24
             }
 
             Text {
-                id: e2content
-                x: 217
-                y: 35
-                width: 209
-                height: 113
-                text: "No effect"
-                font.pixelSize: 12
+                id: text2
+                x: 270
+                y: 215
+                text: delay1Val + " " + delay2Val + " " + chorus1Val + " " + chorus2Val
+                font.pixelSize: 24
             }
+
+            Delay{
+                id: d2
+                opacity: 0
+            }
+
+            Chorus{
+                id: c2
+                opacity: 0
+            }
+
+            NoEffect{
+                id: n2
+                opacity: 1
+            }
+
 
             states: [
                 State {
-                    name: "base"
+                    name: "No effect"
                     PropertyChanges {
-                        target: e2content; text: "No effect"
+                        target: d2; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: c2; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: n2; opacity: 1
+                    }
+                    PropertyChanges {
+                        target: c2; z: 0
+                    }
+                    PropertyChanges {
+                        target: d2; z: 0
+                    }
+                    PropertyChanges {
+                        target: n2; z: 1
                     }
 
                 },
                 State {
-                    name: "delay"
+                    name: "Delay"
                     PropertyChanges {
-                        target: e2content; text: "Delay"
+                        target: d2; opacity: 1
+                    }
+                    PropertyChanges {
+                        target: c2; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: n2; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: c2; z: 0
+                    }
+                    PropertyChanges {
+                        target: d2; z: 1
+                    }
+                    PropertyChanges {
+                        target: n2; z: 0
                     }
                 },
                 State {
-                    name: "chorus"
+                    name: "Chorus"
                     PropertyChanges {
-                        target: e2content; text: "Chorus"
+                        target: d2; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: c2; opacity: 1
+                    }
+                    PropertyChanges {
+                        target: n2; opacity: 0
+                    }
+                    PropertyChanges {
+                        target: c2; z: 1
+                    }
+                    PropertyChanges {
+                        target: d2; z: 0
+                    }
+                    PropertyChanges {
+                        target: n2; z: 0
                     }
                 }
 
@@ -410,10 +677,10 @@ Rectangle {
 
         Rectangle {
             id: volumerec
-            x: 1060
+            x: eqrec.width
             y: 0
-            width: 200
-            height: 350
+            width: contentContainer.width-eqrec.width
+            height: contentContainer.height/2
             color: "#ffffff"
             radius: 1
             border.width: 1
@@ -427,93 +694,4 @@ Rectangle {
         }
 
     }
-
-    /*Slider {
-        id: delaySlider
-        x: 42
-        y: 249
-        opacity: 0
-        onValueChanged: {
-            delayLabel.text = qsTr("Delay:" + delaySlider.value.toFixed(0) + " MSEC")
-        }
-    }
-
-    Label {
-        id: delayLabel
-        x: 259
-        y: 91
-        text: qsTr("Delay:" + delaySlider.value.toFixed(0) + " MSEC")
-        opacity: 0
-
-    }*/
-
-    /*ToolButton {
-        id: toolButton1
-        x: 321
-        y: 186
-    }
-
-    states: [
-        State {
-            name: "Delay"
-
-            PropertyChanges {
-                target: delaySlider
-                x: 42
-                y: 209
-                width: 436
-                height: 22
-                maximumValue: 99
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: saveField
-                x: 0
-                y: 0
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: saveButton
-                x: 0
-                y: 25
-                anchors.bottomMargin: -446
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: presetList
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: saveContainer
-                x: 0
-                width: 140
-                height: 50
-                anchors.bottomMargin: 0
-            }
-
-            PropertyChanges {
-                target: containerTop
-                x: 0
-                y: 0
-            }
-
-            PropertyChanges {
-                target: delayLabel
-                x: 233
-                y: 143
-                opacity: 1
-            }
-        },
-        State {
-            name: "Echo"
-        },
-        State {
-            name: "Churus"
-        }
-    ]*/
-
 }

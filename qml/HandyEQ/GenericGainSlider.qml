@@ -3,18 +3,21 @@ import QtQuick.Controls 1.1
 
 Item{
     property string text1: "value"
-    property int curValue: gainSlide.value
+    property int curValue: 0-gainSlide.value
+    property int sValue: 0
 
     Slider {
         id: gainSlide
         width: 30
         height: 280
+        rotation: 180
         stepSize: 3
         maximumValue: 99
+        value: sValue
         minimumValue: 0
         orientation: 0
         onValueChanged: {
-            curValue = gainSlide.value
+            curValue = -gainSlide.value
         }
     }
 
@@ -59,7 +62,7 @@ Item{
         x: 65
         y: 68
         height: 26
-        text: curValue-99 + " dB"
+        text: curValue + " dB"
         font.pixelSize: 12
     }
 
