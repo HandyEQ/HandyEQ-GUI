@@ -348,14 +348,57 @@ Rectangle {
                     height: saveContainer.height/2
                     text: qsTr("Save")
                     onClicked: {
-                        e1.bassStart        = 0
-                        e1.midrangeStart    = 0
-                        e1.trebleStart      = 0
-                        d1.delayStartS      = 1
-                        d1.delayStartMS     = 10
-                        d2.delayStartS      = 1
-                        d2.delayStartMS     = 10
-                        volume.sValue       = 50
+                        var dsp1, dsp2
+                        //Dsp effect one save generation
+                        if(effect1rec.state == "Delay"){
+                            dsp1 = {
+                                "name": "delay",
+                                "delay": delay1Val
+                            }
+                        } else if (effect1rec.state == "Chorus"){
+                            dsp1 = {
+                                "name": "chorus",
+                                "val1": chorus1Val
+                            }
+                        } else {
+                            dsp1 = {
+                                "name": null
+                            }
+                        }
+                        //Dsp effect two save generation
+                        if(effect2rec.state == "Delay"){
+                            dsp2 = {
+                                "name": "delay",
+                                "delay": delay2Val
+                            }
+                        } else if (effect2rec.state == "Chorus"){
+                            dsp2= {
+                                "name": "chorus",
+                                "val1": chorus2Val
+                            }
+                        } else {
+                            dsp2 = {
+                                "name": null
+                            }
+                        }
+
+                        var newPreset = {
+                            "name": saveField.text,
+                            "gain": gainVal,
+                            "bass": bassVal,
+                            "mid": midVal,
+                            "treble": trebleVal,
+                            "dsp1": dsp1,
+                            "dsp2": dsp2
+                        }
+                        presetModel.append(newPreset)
+                        fileH.write(newPreset)
+                        saveField.text = ""
+                    }
+                    FileHandeler {
+                        id: fileH
+                        onError: console.log("Debug"+msg)
+                        source: "presets.txt"
                     }
                 }
 

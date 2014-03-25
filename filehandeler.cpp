@@ -40,7 +40,7 @@ QJsonArray FileHandeler::read()
     }
 }
 
-bool FileHandeler::write(const QString &name, const qint32 &value)
+bool FileHandeler::write(const QJsonObject &object)
 {
     //Set input file
     QFile file(mSource);
@@ -59,15 +59,15 @@ bool FileHandeler::write(const QString &name, const qint32 &value)
         QJsonDocument doc = QJsonDocument::fromJson(input.toUtf8());
         //Create JSONArray and JSONObject
         QJsonArray arr = doc.array();
-        QJsonObject obj;
+        //QJsonObject obj;
         //set JSONArray to content of JSONDoc
         qDebug() << "Reading file";
         qDebug() << arr.size();
         //input values into JSONObject
-        obj.insert("name",name);
-        obj.insert("delay",value);
+        //obj.insert("name",name);
+        //obj.insert("delay",value);
         //Append JSONObject to end of JSONArray
-        arr.append(obj);
+        arr.append(object);
         //Set JSONArray to content of JSONDoc
         doc.setArray(arr);
         //Write data to doc
