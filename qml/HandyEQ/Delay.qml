@@ -8,8 +8,9 @@ Item{
 
     property double curDelay: seconds.curValue + mili.curValue
     property string text1: "Delay"
-    property int delayStartS: 0
-    property int delayStartMS: 0
+    property double delayStart: 0
+    property int delayStartS: delayStart*10
+    property int delayStartMS: (delayStart*1000)%100
 
     GenericHorizontalSlider{
         id: seconds

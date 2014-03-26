@@ -136,6 +136,7 @@ Rectangle {
                     x: 20
                     y: 55
                     text: qsTr("No effect")
+                    checked: true
                     onClicked: {
                         effect1rec.state = "No effect"
                     }
@@ -185,6 +186,7 @@ Rectangle {
                     x: 20
                     y: 55
                     text: qsTr("No effect")
+                    checked: true
                     onClicked: {
                         effect2rec.state = "No effect"
                     }
@@ -212,32 +214,14 @@ Rectangle {
                 x: 0
                 y: 0
                 width: containerRight.width
-                height: containerRight.height-200
+                height: containerRight.height-250
                 highlightFollowsCurrentItem: true
                 model: ListModel {
                     id: presetModel
-
-                    ListElement {
-                        name: "Grey"
-                        colorCode: "grey"
-                    }
-
-                    ListElement {
-                        name: "Red"
-                        colorCode: "red"
-                    }
-
-                    ListElement {
-                        name: "Blue"
-                        colorCode: "blue"
-                    }
-
-                    ListElement {
-                        name: "Green"
-                        colorCode: "green"
-                    }
                 }
-
+                Component.onCompleted: {
+                    presetModel.append(fileH.read())
+                }
 
                 delegate: Rectangle {
                     x: 5
@@ -251,14 +235,51 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            /*var delay = presetModel.get(index).delay
-                            var name = presetModel.get(index).name
-                            console.log("Index: "+index)
-                            console.log("Preset: "+name+" ,Val:"+delay)
-                            console.log("List Size: "+presetList.count+"\n")
-                            delayLabel.text = qsTr("Delay:" + delay + " MSEC")
-                            delaySlider.value = delay*/
+                            e1.bassStart = presetModel.get(index).bass
+                            e1.midrangeStart = presetModel.get(index).mid
+                            e1.trebleStart = presetModel.get(index).treble
+                            volume.sValue = presetModel.get(index).gain*-1
+                            if(presetModel.get(index).dsp1.name == "delay"){
+                                menuDelay1.checked = true
+                                effect1rec.state = "Delay"
+                                d1.delayStart = presetModel.get(index).dps1.delay
+                            }else if(presetModel.get(index).dsp1.name == "chorus"){
+                                menuchorus1.checked = true
+                                effect1rec.state = "Chorus"
+                                c1.delayStart = presetModel.get(index).dsp1.val1
+                            }else{
+                                menuBase1.checked = true
+                                effect1rec.state = "NoEffect"
+                            }
+                            if(presetModel.get(index).dsp2.name == "delay"){
+                                menuDelay2.checked = true
+                                effect2rec.state = "Delay"
+                            }else if(presetModel.get(index).dsp2.name == "chorus"){
+                                menuchorus2.checked = true
+                                effect2rec.state = "Chorus"
+                            }else{
+                                menuBase2.checked = true
+                                effect2rec.state = "NoEffect"
+                            }
 
+                            console.log("Index: "+index)
+                            console.log("Preset: "+name+" ,bass:"+bassVal+" ,mid:"+midVal+" ,treble:"+trebleVal)
+                            console.log("gain:"+gainVal)
+                            console.log("Effect1:"+presetModel.get(index).dsp1.name)
+                            console.log("Effect2:"+presetModel.get(index).dsp2.name)
+
+                            if(presetModel.get(index).dsp1.name == "delay"){
+                                console.log("Effect1val: "+delay1Val)
+                            }else if(presetModel.get(index).dsp1.name == "chorus"){
+                                console.log("Effect1val: "+chorus1Val)
+                            }
+                            if(presetModel.get(index).dsp2.name == "delay"){
+                                console.log("Effect2val: "+delay2Val)
+                            }else if(presetModel.get(index).dsp2.name == "chorus"){
+                                console.log("Effect2val: "+chorus2Val)
+                            }
+
+                            console.log("List Size: "+presetList.count+"\n")
                         }
                     }
                 }
@@ -279,22 +300,7 @@ Rectangle {
                     height: sendContainer.height
                     text: qsTr("Send")
                     onClicked: {
-                        e1.bassStart        = 5
-                        e1.midrangeStart    = 5
-                        e1.trebleStart      = 5
-                        d1.delayStartS      = 5
-                        d1.delayStartMS     = 5
-                        d2.delayStartS      = 5
-                        d2.delayStartMS     = 5
-                        volume.sValue       = 5
-                        e1.bassStart        = 5
-                        e1.midrangeStart    = 5
-                        e1.trebleStart      = 5
-                        d1.delayStartS      = 5
-                        d1.delayStartMS     = 5
-                        d2.delayStartS      = 5
-                        d2.delayStartMS     = 5
-                        volume.sValue       = 99
+                        d1.delayStart = 1.555
                     }
                 }
             }
@@ -302,7 +308,7 @@ Rectangle {
             Item {
                 id: resetContainer
                 x: 10
-                y: containerRight.height-150
+                y: containerRight.height-200
                 width: 120
                 height: 40
                 Button {
@@ -316,19 +322,34 @@ Rectangle {
                         e1.bassStart        = 3
                         e1.midrangeStart    = 3
                         e1.trebleStart      = 3
-                        d1.delayStartS      = 3
-                        d1.delayStartMS     = 3
-                        d2.delayStartS      = 3
-                        d2.delayStartMS     = 3
+                        d1.delayStart      = 3
+                        d2.delayStart      = 3
                         volume.sValue       = 3
                         e1.bassStart        = 0
                         e1.midrangeStart    = 0
                         e1.trebleStart      = 0
-                        d1.delayStartS      = 0
-                        d1.delayStartMS     = 0
-                        d2.delayStartS      = 0
-                        d2.delayStartMS     = 0
+                        d1.delayStart      = 0
+                        d2.delayStart      = 0
                         volume.sValue       = 0
+                    }
+                }
+            }
+
+            Item {
+                id: removeContainer
+                x: 10
+                y: containerRight.height-150
+                width: 120
+                height: 40
+
+                Button {
+                    id: removeButton
+                    x: 0
+                    y: 0
+                    width: removeContainer.width
+                    height: removeContainer.height
+                    text: qsTr("Remove")
+                    onClicked: {
                     }
                 }
             }
@@ -415,9 +436,6 @@ Rectangle {
                     placeholderText: ""
                 }
             }
-
-
-
         }
         /*Column {
             anchors.fill: parent
@@ -518,7 +536,7 @@ Rectangle {
             color: "#ffffff"
             radius: 1
             border.width: 1
-            state: "base"
+            state: "NoEffect"
 
             Delay{
                 id: d1
@@ -610,9 +628,9 @@ Rectangle {
             y: contentContainer.height/2
             width: contentContainer.width/2
             height: contentContainer.height/2
-            color: "#ffffff"
             radius: 1
             border.width: 1
+            state: "NoEffect"
 
             Text {
                 id: text1
@@ -724,7 +742,6 @@ Rectangle {
             y: 0
             width: contentContainer.width-eqrec.width
             height: contentContainer.height/2
-            color: "#ffffff"
             radius: 1
             border.width: 1
 

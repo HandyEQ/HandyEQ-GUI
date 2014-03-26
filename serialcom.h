@@ -2,17 +2,17 @@
 #define SERIALCOM_H
 
 #include <QObject>
+#include <QSerialPort>
+#include <QSerialPortInfo>
 
 class Serialcom : public QObject
 {
     Q_OBJECT
 public:
     explicit Serialcom(QObject *parent = 0);
-
-signals:
-
 public slots:
-
+signals:
+private:
 };
 
 #endif // SERIALCOM_H
