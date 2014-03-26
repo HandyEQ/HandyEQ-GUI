@@ -2,35 +2,43 @@
 #define SERIAlCOM_H
 
 #include <QObject>
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
+#include <QSerialPort>
+#include <QSerialPortInfo>
+#include <QList>
 
 class SerialCom : public QObject
 {
     Q_OBJECT
 public:
-    Q_PROPERTY(const char* data READ data WRITE setData NOTIFY dataChanged)
+    Q_PROPERTY(QString data
+               READ data
+               WRITE setData
+               NOTIFY dataChanged)
     explicit SerialCom(QObject *parent = 0);
 
-    Q_INVOKABLE void sendData(const char * intData);
+    Q_INVOKABLE void sendData();
+    Q_INVOKABLE void recieveData();
+    Q_INVOKABLE QList<QSerialPortInfo> listPorts();
 
-    const char* data(){
+    QString data(){
         return intData;
     }
 
 signals:
-    void dataChanged(){
-
-    }
-
+    void dataChanged(const QString &data);
 
 public slots:
-    void setData(const char* inpData){
+    void setData(QString inpData){
         intData = inpData;
+    }
+    void setPort(QSerialPort* newPort){
+        port = newPort;
     }
 
 private:
-    const char* intData;
+    QString intData;
+    QString outData;
+    QSerialPort* port;
 };
 
 #endif // SERIALCOM_H

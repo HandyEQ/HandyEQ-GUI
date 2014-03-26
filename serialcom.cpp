@@ -1,20 +1,30 @@
 #include "serialcom.h"
 #include <QObject>
-#include <QtSerialPort>
+#include <QSerialPort>
 
 SerialCom::SerialCom(QObject *parent) : QObject(parent)
 {
 
 }
 
-SerialCom::sendData(const char *intData){
-    QSerialPort port;
+QList<QSerialPortInfo> SerialCom::listPorts(){
     QSerialPortInfo info;
-    QList ports = info.availablePorts();
-    ports.contains();
-    port.Baud9600;
-    port.Data8;
-    port.setPort();
-    port.write(intData,8);
-    port.close();
+    QList<QSerialPortInfo> ports = info.availablePorts();
+    //ports.contains();
+    return ports;
 }
+
+void SerialCom::recieveData(){
+    port->open(QIODevice::ReadWrite);
+    //port->read();
+}
+
+void SerialCom::sendData(){
+
+    port->open(QIODevice::ReadWrite);
+    port->setBaudRate(9600, QSerialPort::AllDirections);
+    port->setDataBits(QSerialPort::Data8);
+    port->write(intData.toUtf8());
+    port->close();
+}
+
