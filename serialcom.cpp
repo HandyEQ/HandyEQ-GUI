@@ -1,59 +1,89 @@
 #include "serialcom.h"
 #include <QObject>
-#include <QSerialPort>
+#include <QDebug>
 
 SerialCom::SerialCom(QObject *parent) : QObject(parent)
 {
 
 }
 
-/*QList<QSerialPortInfo> SerialCom::listPorts(){
-    QSerialPortInfo info;
-    QList<QSerialPortInfo> ports = info.availablePorts();
-    //ports.contains();
-    return ports;
-}*/
+QList<QString> SerialCom::getPortList(){
+   /* QSerialPortInfo info;
+    //Creates a list of available serial ports on the system.
+    QList<QSerialPortInfo> aPorts = info.availablePorts();
+    QList<QString> ports;*/
 
-void SerialCom::recieveDataout(){
+    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+       qDebug() << "Name : " << info.portName();
+       qDebug() << "Description : " << info.description();
+       qDebug() << "Manufacturer: " << info.manufacturer();
+    }
+
+    /*//Creates a list of the description string of the serial port,
+    //if available; otherwise returns an empty string.
+    //Looks if there is content in the list.
+    if(!aPorts.isEmpty()){
+        qDebug() << "OMG";
+        //The list is created by looping though the available ports.
+        for(int i=0; i<aPorts.size(); i++){
+            qDebug() << "OMG!";
+            ports[i] = aPorts[i].description();
+            qDebug() << "OMG!!";
+        }
+    }
+    qDebug() << "OMG!!!";
+    //Returns the description strings of the available serial ports.
+    return ports;*/
+}
+
+QString SerialCom::readData(){
 
     QByteArray datain;
-    //Trys to opens the port.
-    if(port->open(QIODevice::ReadWrite)){
-        //If the port is opened correctly.
+    QString outData;
+    //Trys to opens the mPort.
+    if(mPort->open(QIODevice::ReadWrite)){
+        //If the mPort is opened correctly.
         //Sets the Baudrate to 9600.
-        port->setBaudRate(9600, QSerialPort::AllDirections);
+        mPort->setBaudRate(9600, QSerialPort::AllDirections);
         //Sets the data to 8 bits.
-        port->setDataBits(QSerialPort::Data8);
-        //Reads the data from the port to the qbitarray datain.
-        datain = port->readAll();
+        mPort->setDataBits(QSerialPort::Data8);
+        //Reads the data from the mPort to the qbitarray datain.
+        datain = mPort->readAll();
         //Converts from a Qbytearray to a qstring and saves it into the outData variable.
         outData = QString::fromUtf8(datain);
     }else{
-        //If the port is not opened correctly.
-        //Sends an error message if the port could not be opened.
-        emit error("Could not open port.");
+        //If the mPort is not opened correctly.
+        //Sends an error message if the mPort could not be opened.
+        emit error("Could not open mPort.");
+        return "0";
     }
-    //Close the port.
-    port->close();
+    //Close the mPort.
+    mPort->close();
+    //Returns the read data.
+    return outData;
 }
 
-void SerialCom::sendDatain(){
+bool SerialCom::sendData(const QString indata){
 
-    //Trys to open the port.
-    if(port->open(QIODevice::ReadWrite)){
-        //If the port is opened correctly.
+    //Trys to open the mPort.
+    if(mPort->open(QIODevice::ReadWrite)){
+        //If the mPort is opened correctly.
         //Sets the Baudrate to 9600.
-        port->setBaudRate(9600, QSerialPort::AllDirections);
+        mPort->setBaudRate(9600, QSerialPort::AllDirections);
         //Sets the data to 8 bits.
-        port->setDataBits(QSerialPort::Data8);
-        //Writes the data from the Qstring intData converted into a Qbytearray.
-        port->write(intData.toUtf8());
+        mPort->setDataBits(QSerialPort::Data8);
+        //Writes the data from the Qstring intdata converted into a Qbytearray.
+        mPort->write(indata.toUtf8());
     }else{
-        //If the port is not opened correctly.
-        //Sends an error message if the port could not be opened.
-        emit error("Could not open port.");
+        //If the mPort is not opened correctly.
+        //Sends an error message if the mPort could not be opened.
+        emit error("Could not open mPort.");
+        //The indata was not sent.
+        return false;
     }
-    //Close the port.
-    port->close();
+    //Close the mPort.
+    mPort->close();
+    //The indata was successfully sent.
+    return true;
 }
 

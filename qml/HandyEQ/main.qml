@@ -136,7 +136,7 @@ Rectangle {
         y: containerTop.height
         width: 140
         height: parent.height-containerTop.height
-        /*Column {
+        Column {
             anchors.fill: parent
             ListView {
                 id: presetList
@@ -202,7 +202,7 @@ Rectangle {
                     }
                 }
             }
-        }*/
+        }
     }
 
     Item {
@@ -233,8 +233,8 @@ Rectangle {
 
         ListView {
             id: listView1
-            x: 238
-            y: 102
+            x: 70
+            y: 43
             width: 110
             height: 160
             delegate: Item {
@@ -257,10 +257,25 @@ Rectangle {
                 }
             }
             model: ListModel {
+                id:serialModel
             }
         }
+        SerialCom{
+            id:serial
+            onError: console.log("Debug"+msg)
 
+        }
 
+        Button {
+            id: button1
+            x: 223
+            y: 51
+            text: qsTr("Button")
+            onClicked: {
+                serialModel.clear()
+                serial.getPortList()
+            }
+        }
     }
 
     states: [
