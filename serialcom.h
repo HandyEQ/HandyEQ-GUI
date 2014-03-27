@@ -10,27 +10,51 @@ class SerialCom : public QObject
 {
     Q_OBJECT
 public:
-    Q_PROPERTY(QString data
-               READ data
-               WRITE setData
-               NOTIFY dataChanged)
+    //Datain will be used for the data that is to be sent.
+    Q_PROPERTY(QString datain
+               READ datain
+               WRITE setDatain
+               NOTIFY datainChanged)
+    //Dataout will be used for the data the is to be recieved.
+    Q_PROPERTY(QString dataout
+               READ dataout
+               WRITE setDataout
+               NOTIFY dataoutChanged)
+    //
+    /*Q_PROPERTY(QList<QSerialPortInfo> list
+               READ list
+               WRITE setList
+               NOTIFY listChanged)*/
     explicit SerialCom(QObject *parent = 0);
 
-    Q_INVOKABLE void sendData();
-    Q_INVOKABLE void recieveData();
-    Q_INVOKABLE QList<QSerialPortInfo> listPorts();
+    Q_INVOKABLE void sendDatain();
+    Q_INVOKABLE void recieveDataout();
 
-    QString data(){
+    QString datain(){
         return intData;
     }
+    QString dataout(){
+        return outData;
+    }
+
+   /* QList<QSerialPortInfo> list(){
+        return portList;
+    }*/
 
 signals:
-    void dataChanged(const QString &data);
+    void datainChanged(const QString &datain);
+    void dataoutChanged(const QString &dataout);
+    void error(const QString &msg);
 
 public slots:
-    void setData(QString inpData){
+    void setDatain(QString inpData){
         intData = inpData;
     }
+
+    void setDataout(QString outpData){
+        outData = outpData;
+    }
+
     void setPort(QSerialPort* newPort){
         port = newPort;
     }
@@ -39,6 +63,7 @@ private:
     QString intData;
     QString outData;
     QSerialPort* port;
+  //  QList<QSerialPortInfo> portList;
 };
 
 #endif // SERIALCOM_H

@@ -136,7 +136,7 @@ Rectangle {
         y: containerTop.height
         width: 140
         height: parent.height-containerTop.height
-        Column {
+        /*Column {
             anchors.fill: parent
             ListView {
                 id: presetList
@@ -202,7 +202,7 @@ Rectangle {
                     }
                 }
             }
-        }
+        }*/
     }
 
     Item {
@@ -230,6 +230,37 @@ Rectangle {
             opacity: 0
 
         }
+
+        ListView {
+            id: listView1
+            x: 238
+            y: 102
+            width: 110
+            height: 160
+            delegate: Item {
+                x: 5
+                height: 40
+                Row {
+                    id: row1
+                    Rectangle {
+                        width: 40
+                        height: 40
+                        color: colorCode
+                    }
+
+                    Text {
+                        text: name
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.bold: true
+                    }
+                    spacing: 10
+                }
+            }
+            model: ListModel {
+            }
+        }
+
+
     }
 
     states: [
