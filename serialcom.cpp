@@ -1,24 +1,26 @@
 #include "serialcom.h"
 #include <QObject>
 #include <QDebug>
+#include <QJsonArray>
+#include <QJsonObject>
 
 SerialCom::SerialCom(QObject *parent) : QObject(parent)
 {
 
 }
 
-QList<QString> SerialCom::getPortList(){
-   /* QSerialPortInfo info;
+QJsonArray SerialCom::getPortList(){
+    QJsonArray serialArray;
     //Creates a list of available serial ports on the system.
-    QList<QSerialPortInfo> aPorts = info.availablePorts();
-    QList<QString> ports;*/
-
     foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
-       qDebug() << "Name : " << info.portName();
-       qDebug() << "Description : " << info.description();
-       qDebug() << "Manufacturer: " << info.manufacturer();
+        qDebug() << "Name : " << info.portName();
+        qDebug() << "Description : " << info.description();
+        qDebug() << "Manufacturer: " << info.manufacturer();
+        QJsonObject obj;
+        obj.insert("name", info.portName());
+        serialArray.append(obj);
     }
-
+    return serialArray;
     /*//Creates a list of the description string of the serial port,
     //if available; otherwise returns an empty string.
     //Looks if there is content in the list.
@@ -37,10 +39,9 @@ QList<QString> SerialCom::getPortList(){
 }
 
 QString SerialCom::readData(){
-
-    QByteArray datain;
     QString outData;
     //Trys to opens the mPort.
+
     if(mPort->open(QIODevice::ReadWrite)){
         //If the mPort is opened correctly.
         //Sets the Baudrate to 9600.
@@ -48,19 +49,19 @@ QString SerialCom::readData(){
         //Sets the data to 8 bits.
         mPort->setDataBits(QSerialPort::Data8);
         //Reads the data from the mPort to the qbitarray datain.
-        datain = mPort->readAll();
-        //Converts from a Qbytearray to a qstring and saves it into the outData variable.
-        outData = QString::fromUtf8(datain);
+        outData = mPort->readAll();
+        qDebug() << outData;
+        //Close the mPort.
+        mPort->close();
+        //Returns the read data.
+        return outData;
     }else{
         //If the mPort is not opened correctly.
         //Sends an error message if the mPort could not be opened.
         emit error("Could not open mPort.");
         return "0";
     }
-    //Close the mPort.
-    mPort->close();
-    //Returns the read data.
-    return outData;
+
 }
 
 bool SerialCom::sendData(const QString indata){
@@ -73,7 +74,12 @@ bool SerialCom::sendData(const QString indata){
         //Sets the data to 8 bits.
         mPort->setDataBits(QSerialPort::Data8);
         //Writes the data from the Qstring intdata converted into a Qbytearray.
+        qDebug() << indata;
         mPort->write(indata.toUtf8());
+        //Close the mPort.
+        mPort->close();
+        //The indata was successfully sent.
+        return true;
     }else{
         //If the mPort is not opened correctly.
         //Sends an error message if the mPort could not be opened.
@@ -81,9 +87,22 @@ bool SerialCom::sendData(const QString indata){
         //The indata was not sent.
         return false;
     }
-    //Close the mPort.
-    mPort->close();
-    //The indata was successfully sent.
-    return true;
 }
 
+bool SerialCom::setPortS(QString portS){
+    //Looks though the list to find a port with the same name as the given string.
+    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+        qDebug() << "Name : " << info.portName();
+        qDebug() << "Description : " << info.description();
+        qDebug() << "Manufacturer: " << info.manufacturer();
+        if(info.portName() == portS){
+            mPort = new QSerialPort;
+            mPort->setPort(info);
+            qDebug() << "Port found";
+            return true;
+        }else{
+           qDebug() << "Port does not exist.";
+        }
+    }
+    return false;
+}

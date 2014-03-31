@@ -5,6 +5,8 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QList>
+#include <QJsonArray>
+
 
 class SerialCom : public QObject
 {
@@ -18,7 +20,8 @@ public:
 
     Q_INVOKABLE bool sendData(const QString indata);
     Q_INVOKABLE QString readData();
-    Q_INVOKABLE QList<QString> getPortList();
+    Q_INVOKABLE QJsonArray getPortList();
+    Q_INVOKABLE bool setPortS(QString portS);
 
     QSerialPort* port()
     {
@@ -31,6 +34,7 @@ signals:
 
 public slots:
     void setPort(QSerialPort* &port){
+
         mPort = port;
     }
 

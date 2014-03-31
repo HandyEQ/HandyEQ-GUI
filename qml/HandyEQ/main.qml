@@ -237,23 +237,23 @@ Rectangle {
             y: 43
             width: 110
             height: 160
-            delegate: Item {
-                x: 5
+            delegate: Rectangle {
+                width: 40
                 height: 40
-                Row {
-                    id: row1
-                    Rectangle {
-                        width: 40
-                        height: 40
-                        color: colorCode
+                MouseArea{
+                    width: parent.width
+                    height: parent.height
+                    x: 0
+                    y: 0
+                    onClicked: {
+                        serial.setPortS(serialModel.get(index).name)
                     }
+                }
 
-                    Text {
-                        text: name
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.bold: true
-                    }
-                    spacing: 10
+                Text {
+                    text: name
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.bold: true
                 }
             }
             model: ListModel {
@@ -273,8 +273,48 @@ Rectangle {
             text: qsTr("Button")
             onClicked: {
                 serialModel.clear()
-                serial.getPortList()
+                var array = serial.getPortList();
+                serialModel.append(array)
+
             }
+        }
+
+        Button {
+            id: send
+            x: 399
+            y: 112
+            text: qsTr("Send")
+            onClicked: {
+                serial.sendData(read.text)
+            }
+        }
+
+        Button {
+            id: read
+            x: 399
+            y: 180
+            text: qsTr("Read")
+            onClicked: {
+                textRead.text = serial.readData()
+            }
+        }
+
+        TextInput {
+            id: textSend
+            x: 305
+            y: 113
+            width: 80
+            height: 20
+            text: qsTr("Send Input")
+            font.pixelSize: 12
+        }
+
+        Text {
+            id: textRead
+            x: 305
+            y: 185
+            text: qsTr("Output")
+            font.pixelSize: 12
         }
     }
 
