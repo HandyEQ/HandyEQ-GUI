@@ -285,7 +285,7 @@ Rectangle {
             y: 112
             text: qsTr("Send")
             onClicked: {
-                serial.sendData(read.text)
+                serial.sendData(textSend.text)
             }
         }
 
@@ -311,10 +311,32 @@ Rectangle {
 
         Text {
             id: textRead
-            x: 305
-            y: 185
+            x: 248
+            y: 242
             text: qsTr("Output")
             font.pixelSize: 12
+        }
+
+        Button {
+            id: open
+            x: 399
+            y: 342
+            text: qsTr("Open")
+            onClicked: {
+                //Exits Qt.
+                //Qt.quit()
+                serial.openPort()
+            }
+        }
+
+        Button {
+            id: close
+            x: 318
+            y: 342
+            text: qsTr("Close")
+            onClicked: {
+                serial.closePort()
+            }
         }
     }
 

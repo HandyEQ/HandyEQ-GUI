@@ -39,52 +39,40 @@ QJsonArray SerialCom::getPortList(){
 }
 
 QString SerialCom::readData(){
-    QString outData;
-    //Trys to opens the mPort.
+    qint64 s = 32;
+    char *inArr = new char[s];
 
-    if(mPort->open(QIODevice::ReadWrite)){
-        //If the mPort is opened correctly.
-        //Sets the Baudrate to 9600.
-        mPort->setBaudRate(9600, QSerialPort::AllDirections);
-        //Sets the data to 8 bits.
-        mPort->setDataBits(QSerialPort::Data8);
+    QString outData;
+
+    //Checks if the port is open.
+    if(mPort->isOpen()){
+        //If the mPort is opened.
         //Reads the data from the mPort to the qbitarray datain.
-        outData = mPort->readAll();
+        mPort->read(inArr, s);
+        outData.sprintf(inArr);
         qDebug() << outData;
-        //Close the mPort.
-        mPort->close();
         //Returns the read data.
         return outData;
     }else{
         //If the mPort is not opened correctly.
         //Sends an error message if the mPort could not be opened.
-        emit error("Could not open mPort.");
+        emit error("Port is closed!");
         return "0";
     }
 
 }
 
 bool SerialCom::sendData(const QString indata){
-
-    //Trys to open the mPort.
-    if(mPort->open(QIODevice::ReadWrite)){
-        //If the mPort is opened correctly.
-        //Sets the Baudrate to 9600.
-        mPort->setBaudRate(9600, QSerialPort::AllDirections);
-        //Sets the data to 8 bits.
-        mPort->setDataBits(QSerialPort::Data8);
+    //Checks if the mPort is open.
+    if(mPort->isOpen()){
+        //If the mPort is opened.
         //Writes the data from the Qstring intdata converted into a Qbytearray.
-        qDebug() << indata;
         mPort->write(indata.toUtf8());
-        //Close the mPort.
-        mPort->close();
-        //The indata was successfully sent.
+        qDebug() << indata;
         return true;
     }else{
-        //If the mPort is not opened correctly.
-        //Sends an error message if the mPort could not be opened.
-        emit error("Could not open mPort.");
-        //The indata was not sent.
+        //If its not open.
+        qDebug() << "Port is closed!";
         return false;
     }
 }
@@ -98,11 +86,47 @@ bool SerialCom::setPortS(QString portS){
         if(info.portName() == portS){
             mPort = new QSerialPort;
             mPort->setPort(info);
-            qDebug() << "Port found";
+            qDebug() << "Port name set";
             return true;
         }else{
            qDebug() << "Port does not exist.";
         }
     }
     return false;
+}
+
+bool SerialCom::openPort(){
+    //Trys to open the mPort.
+    if(mPort->open(QIODevice::ReadWrite)){
+        //If the mPort is opened correctly.
+        //Sets the Baudrate.
+        mPort->setBaudRate(9600, QSerialPort::AllDirections);
+        mPort->setFlowControl(QSerialPort::NoFlowControl);
+        mPort->setParity(QSerialPort::NoParity);
+        mPort->setStopBits(QSerialPort::OneStop);
+        //Sets the data to 8 bits.
+        mPort->setDataBits(QSerialPort::Data8);
+        qDebug() << "Port open!";
+        //Close the mPort.
+        return true;
+    }else{
+        //If the mPort is not opened correctly.
+        //Sends an error message if the mPort could not be opened.
+        emit error("Could not open mPort.");
+        //The indata was not sent.
+        return false;
+    }
+}
+
+bool SerialCom::closePort(){
+    //Close the port.
+    if(mPort->isOpen()){
+        mPort->close();
+        qDebug() << "Closing the port!";
+        return true;
+    }else{
+        qDebug() << "The port is not open!";
+        return false;
+    }
+
 }

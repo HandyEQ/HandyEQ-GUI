@@ -22,6 +22,8 @@ public:
     Q_INVOKABLE QString readData();
     Q_INVOKABLE QJsonArray getPortList();
     Q_INVOKABLE bool setPortS(QString portS);
+    Q_INVOKABLE bool openPort();
+    Q_INVOKABLE bool closePort();
 
     QSerialPort* port()
     {
