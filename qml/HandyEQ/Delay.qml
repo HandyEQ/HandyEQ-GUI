@@ -18,7 +18,6 @@ Item{
         y: 50
         text1: "Seconds"
         sValue: delayStartS
-
     }
     GenericHorizontalSlider{
         id: mili
@@ -30,21 +29,18 @@ Item{
         text1: "Milliseconds"
         sValue: delayStartMS
     }
-
     Text {
         x: 10
         y: 0
         text: text1
         font.pixelSize: 28
     }
-
     Text {
         x: 450
         y: 50
         text: "Current value:"
         font.pixelSize: 20
     }
-
     Text {
         x: 502
         y: 80

@@ -82,3 +82,8 @@ bool FileHandeler::write(const QJsonObject &object)
         return true;
     }
 }
+
+bool FileHandeler::removeAll()
+{
+    return false;
+}

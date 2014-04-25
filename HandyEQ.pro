@@ -26,8 +26,10 @@ OTHER_FILES += \
     qml/HandyEQ/Chorus.qml \
     qml/HandyEQ/GenericHorizontalSlider.qml \
     qml/HandyEQ/NoEffect.qml \
-    qml/HandyEQ/Equalizer.qml
+    qml/HandyEQ/Equalizer.qml \
+    qml/HandyEQ/SerialCom.qml \
+    qml/HandyEQ/Timern.qml
 
 HEADERS += \
-    filehandeler.h \
-    serialcom.h
+    serialcom.h \
+    filehandeler.h

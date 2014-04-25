@@ -20,7 +20,6 @@ Item{
             curValue = -gainSlide.value
         }
     }
-
     Text {
         x: -46
         y: -44
@@ -31,7 +30,6 @@ Item{
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 28
     }
-
     Text {
         x: 40
         y: 0
@@ -40,7 +38,6 @@ Item{
         text: qsTr("0 dB")
         font.pixelSize: 12
     }
-
     Text {
         x: 40
         y: 250
@@ -49,7 +46,6 @@ Item{
         text:  qsTr("-99 dB")
         font.pixelSize: 12
     }
-
     Text {
         x: 40
         y: 36
@@ -57,7 +53,6 @@ Item{
         text: qsTr("Current value:")
         font.pixelSize: 12
     }
-
     Text {
         x: 65
         y: 68
@@ -65,6 +60,5 @@ Item{
         text: curValue + " dB"
         font.pixelSize: 12
     }
-
 }
 

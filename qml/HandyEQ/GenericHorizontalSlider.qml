@@ -27,7 +27,6 @@ Item{
             curValue: sliderHorizontal.value/scale
         }
     }
-
     Text {
         x: 0
         y: 0
@@ -38,7 +37,6 @@ Item{
         horizontalAlignment: Text.AlignLeft
         font.pixelSize: 28
     }
-
     Text {
         x: 330
         y: 115
@@ -47,7 +45,6 @@ Item{
         text: maxval/scale + " " + unit
         font.pixelSize: 12
     }
-
     Text {
         x: 0
         y: 115
@@ -56,7 +53,6 @@ Item{
         text: "0 " + unit
         font.pixelSize: 12
     }
-
     Text {
         x: 180
         y: 0
@@ -67,7 +63,6 @@ Item{
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 12
     }
-
     Text {
         x: 205
         y: 32
@@ -78,6 +73,4 @@ Item{
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 12
     }
-
-
 }

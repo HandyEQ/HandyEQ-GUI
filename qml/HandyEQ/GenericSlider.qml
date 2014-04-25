@@ -23,7 +23,6 @@ Item{
         onValueChanged: {
             curValue = genSlider.value-12
         }
-
     }
     Text {
         x: -46
@@ -35,7 +34,6 @@ Item{
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 28
     }
-
     Text {
         x: 40
         y: 0
@@ -44,7 +42,6 @@ Item{
         text: maxval/2 +" dB"
         font.pixelSize: 12
     }
-
     Text {
         x: 40
         y: 120
@@ -53,7 +50,6 @@ Item{
         text: qsTr("0 dB")
         font.pixelSize: 12
     }
-
     Text {
         x: 40
         y: 250
@@ -62,7 +58,6 @@ Item{
         text: -maxval/2 +" dB"
         font.pixelSize: 12
     }
-
     Text {
         x: 40
         y: 36
@@ -73,7 +68,6 @@ Item{
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 12
     }
-
     Text {
         x: 65
         y: 68
@@ -84,5 +78,4 @@ Item{
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 12
     }
-
 }

@@ -8,6 +8,7 @@ Rectangle {
     id: baseWindow
     width: 1400
     height: 800
+    state: "start"
 
     property int bassVal:   e1.bass
     property int midVal:    e1.midrange
@@ -17,8 +18,22 @@ Rectangle {
     property double delay2Val:    d2.curDelay
     property int chorus1Val:   c1.curChorus
     property int chorus2Val:   c2.curChorus
+    property string inText: ""
+    property string newText: ""
 
-
+    SerialCom{
+        id: serialC
+        objectName: "serialC"
+    }
+    Timern {
+        onTriggered:{
+            serialR.append(serialC.inDatan)
+        }
+    }
+    ListModel{
+        //This will be used to store the data read from the serial port.
+        id: serialR
+    }
     Item {
         id: containerTop
         x: 0
@@ -36,7 +51,18 @@ Rectangle {
             font.pointSize: 48
             font.family: "Courier"
         }
+        MouseArea{
+            x: 0
+            y: 0
+            z: 1
+            opacity: 1
+            width: 400
+            height: 100
 
+            onClicked: {
+                baseWindow.state = "debug"
+            }
+        }
         Item {
             id: systemoverview
             x: 400
@@ -67,8 +93,6 @@ Rectangle {
                     font.pixelSize: 28
                 }
             }
-
-
             Rectangle {
                 id: menuvolume
                 x: 300
@@ -91,9 +115,7 @@ Rectangle {
                     font.pixelSize: 28
                 }
             }
-
-
-            Rectangle {
+                Rectangle {
                 id: menueffect1
                 x: 550
                 y: 10
@@ -106,8 +128,6 @@ Rectangle {
                 ExclusiveGroup{
                     id: menu1
                 }
-
-
                 RadioButton {
                     id: menuDelay1
                     exclusiveGroup: menu1
@@ -118,7 +138,6 @@ Rectangle {
                         effect1rec.state = "Delay"
                     }
                 }
-
                 RadioButton {
                     id: menuchorus1
                     exclusiveGroup: menu1
@@ -129,7 +148,6 @@ Rectangle {
                         effect1rec.state = "Chorus"
                     }
                 }
-
                 RadioButton {
                     id: menuBase1
                     exclusiveGroup: menu1
@@ -142,9 +160,7 @@ Rectangle {
                     }
                 }
             }
-
-
-            Rectangle {
+                Rectangle {
                 id: menueffect2
                 x: 800
                 y: 10
@@ -191,10 +207,9 @@ Rectangle {
                         effect2rec.state = "No effect"
                     }
                 }
+                }
             }
         }
-    }
-
     Item {
         id: containerRight
         x: contentContainer.width
@@ -214,20 +229,21 @@ Rectangle {
                 x: 0
                 y: 0
                 width: containerRight.width
-                height: containerRight.height-250
+                height: containerRight.height-500
                 highlightFollowsCurrentItem: true
+
                 model: ListModel {
                     id: presetModel
                 }
                 Component.onCompleted: {
                     presetModel.append(fileH.read())
                 }
-
                 delegate: Rectangle {
                     x: 5
                     height: 40
                     width: presetList.width
                     z: 0
+
                     Text {
                         text: name
                         anchors.verticalCenter: parent.verticalCenter
@@ -239,6 +255,7 @@ Rectangle {
                             e1.midrangeStart = presetModel.get(index).mid
                             e1.trebleStart = presetModel.get(index).treble
                             volume.sValue = presetModel.get(index).gain*-1
+
                             if(presetModel.get(index).dsp1.name == "delay"){
                                 menuDelay1.checked = true
                                 effect1rec.state = "Delay"
@@ -269,48 +286,262 @@ Rectangle {
                             console.log("Effect2:"+presetModel.get(index).dsp2.name)
 
                             if(presetModel.get(index).dsp1.name == "delay"){
-                                console.log("Effect1val: "+delay1Val)
+                                    console.log("Effect1val: "+delay1Val)
                             }else if(presetModel.get(index).dsp1.name == "chorus"){
-                                console.log("Effect1val: "+chorus1Val)
-                            }
+                                    console.log("Effect1val: "+chorus1Val)
+                                }
                             if(presetModel.get(index).dsp2.name == "delay"){
-                                console.log("Effect2val: "+delay2Val)
+                                    console.log("Effect2val: "+delay2Val)
                             }else if(presetModel.get(index).dsp2.name == "chorus"){
-                                console.log("Effect2val: "+chorus2Val)
-                            }
+                                    console.log("Effect2val: "+chorus2Val)
+                                }
 
                             console.log("List Size: "+presetList.count+"\n")
+                            }
+                    }
+                }
+            }
+        }
+        Item {
+                id: serialContainer
+                x: 10
+                y: containerRight.height-400
+                width: 120
+                height: 200
+                state: "setPortList"
+
+                Item {
+                    id: setPort
+                    anchors.fill: serialContainer
+                    opacity: 1
+                    z: 1
+
+                    Text {
+                        id: serialText
+                        text: qsTr("Available ports:")
+                    }
+                    Column{
+                        id: portColumn
+                        x: 0
+                        y: serialText.height
+                        spacing: 0
+                        width: setPort.width
+                        height: setPort.height-serialText.height-serialContainer.height
+
+                        ListView{
+                            id: portList
+                            x: 0
+                            y: 0
+                            width: setPort.width
+                            height: setPort.height-serialText.height-50
+                            highlightFollowsCurrentItem: true
+                            model: ListModel{
+                                id: portlistmodel
+                            }
+                            Component.onCompleted: {
+                                portlistmodel.append(serialC.getPortList())
+                            }
+                            delegate: Rectangle {
+                                x: 5
+                                height: 40
+                                width: presetList.width
+                                z: 0
+                                Text {
+                                    text: name
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        serialC.setPortS(name)
+                                        serialContainer.state = "serialCom"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Button {
+                        id: renewPorts
+                        x: 0
+                        y: setPort.height-50
+                        width: setPort.width
+                        height: 40
+
+                        text: qsTr("Get ports")
+                        onClicked: {
+                            portlistmodel.clear()
+                            portlistmodel.append(serialC.getPortList())
+                            //serialContainer.state = "serialCom"
                         }
                     }
                 }
-            }
-
-            Item {
-                id: sendContainer
-                x: 10
-                y: containerRight.height-100
-                width: 120
-                height: 40
-
-                Button {
-                    id: sendButton
-                    x: 0
-                    y: 0
-                    width: sendContainer.width
-                    height: sendContainer.height
-                    text: qsTr("Send")
-                    onClicked: {
-                        d1.delayStart = 1.555
+                Item{
+                    id: serialCom
+                    anchors.fill: serialContainer
+                    opacity: 0
+                    z: 0
+                    state: "closed"
+                    Button {
+                        id: open
+                        x: 0
+                        y: 0
+                        z: 1
+                        opacity: 1
+                        width: serialCom.width
+                        height: 40
+                        text: qsTr("Open port")
+                        onClicked: {
+                            serialCom.state = "open"
+                            serialC.openPort()
+                        }
                     }
-                }
-            }
+                    Button {
+                        id: close
+                        x: 0
+                        y: 0
+                        z: 0
+                        opacity: 0
+                        width: serialCom.width
+                        height: 40
+                        text: qsTr("Close port")
+                        onClicked: {
+                            serialCom.state = "closed"
+                            serialC.closePort()
+                        }
+                    }
+                    Button {
+                        id: sendSerialButton
+                        x: 0
+                        y: 50
+                        z: 0
+                        opacity: 0
+                        width: serialCom.width
+                        height: 40
+                        text: qsTr("Send to board")
+                        onClicked: {
+                           var newPreset = {
+                                "name": saveField.text,
+                                "gain": gainVal,
+                                "bass": bassVal,
+                                "mid": midVal,
+                                "treble": trebleVal,
+                            }
+                            serialC.sendData(newPreset)
+                        }
+                    }
+                    Button {
+                        id: changePortButton
+                        x: 0
+                        y: 50
+                        z: 1
+                        opacity: 1
+                        width: serialCom.width
+                        height: 40
+                        text: qsTr("Change port")
+                        onClicked: {
+                            serialContainer.state = "setPortList"
+                        }
+                    }
 
-            Item {
+                    states: [
+                        State {
+                            name: "open"
+                            PropertyChanges {
+                                target: open; opacity: 0
+                            }
+                            PropertyChanges {
+                                target: open; z: 0
+                            }
+                            PropertyChanges {
+                                target: close; opacity: 1
+                            }
+                            PropertyChanges {
+                                target: close; z: 1
+                            }
+                            PropertyChanges {
+                                target: sendSerialButton; opacity: 1
+                            }
+                            PropertyChanges {
+                                target: sendSerialButton; z: 1
+                            }
+                            PropertyChanges {
+                                target: changePortButton; opacity: 0
+                            }
+                            PropertyChanges {
+                                target: changePortButton; z: 0
+                            }
+                        },
+                        State {
+                            name: "closed"
+                            PropertyChanges {
+                                target: open; opacity: 1
+                            }
+                            PropertyChanges {
+                                target: open; z: 1
+                            }
+                            PropertyChanges {
+                                target: close; opacity: 0
+                            }
+                            PropertyChanges {
+                                target: close; z: 0
+                            }
+                            PropertyChanges {
+                                target: sendSerialButton; opacity: 0
+                            }
+                            PropertyChanges {
+                                target: sendSerialButton; z: 0
+                            }
+                            PropertyChanges {
+                                target: changePortButton; opacity: 1
+                            }
+                            PropertyChanges {
+                                target: changePortButton; z: 1
+                            }
+                        }
+
+                    ]
+                }
+
+                states: [
+                    State {
+                        name: "setPortList"
+                        PropertyChanges {
+                            target: setPort; opacity: 1
+                        }
+                        PropertyChanges {
+                            target: setPort; z: 1
+                        }
+                        PropertyChanges {
+                            target: serialCom; z: 0
+                        }
+                        PropertyChanges {
+                            target: serialCom; opacity: 0
+                        }
+                    },
+                    State {
+                        name: "serialCom"
+                        PropertyChanges {
+                            target: setPort; opacity: 0
+                        }
+                        PropertyChanges {
+                            target: setPort; z: 0
+                        }
+                        PropertyChanges {
+                            target: serialCom; z: 1
+                        }
+                        PropertyChanges {
+                            target: serialCom; opacity: 1
+                        }
+                    }
+                ]
+            }
+        Item {
                 id: resetContainer
                 x: 10
                 y: containerRight.height-200
                 width: 120
                 height: 40
+
                 Button {
                     id: resetButton
                     x: 0
@@ -334,27 +565,17 @@ Rectangle {
                     }
                 }
             }
-
-            Item {
+        Item {
                 id: removeContainer
                 x: 10
                 y: containerRight.height-150
                 width: 120
                 height: 40
 
-                Button {
-                    id: removeButton
-                    x: 0
-                    y: 0
-                    width: removeContainer.width
-                    height: removeContainer.height
-                    text: qsTr("Remove")
-                    onClicked: {
-                    }
-                }
-            }
+                //Will be used to remove all the presets in the list.
 
-            Item {
+            }
+        Item {
                 id: saveContainer
                 x: 10
                 y: containerRight.height-100
@@ -402,7 +623,6 @@ Rectangle {
                                 "name": null
                             }
                         }
-
                         var newPreset = {
                             "name": saveField.text,
                             "gain": gainVal,
@@ -422,11 +642,10 @@ Rectangle {
                         source: "presets.txt"
                     }
                 }
-
                 TextField {
                     id: saveField
                     x: 0
-                    y: saveContainer.height/2
+                    y: (saveContainer.height/2)+10
                     width: saveContainer.width
                     height: saveContainer.height/2
                     scale: 1
@@ -436,75 +655,7 @@ Rectangle {
                     placeholderText: ""
                 }
             }
-        }
-        /*Column {
-            anchors.fill: parent
-            ListView {
-                id: presetList
-                x: parent.x
-                y: parent.y
-                width: 140
-                opacity: 0
-                highlightFollowsCurrentItem: true
-                model: ListModel {
-                    id: presetModel          
-                }
-                delegate: Rectangle {
-                    height: 40
-                    width: 140
-                    Text {
-                        anchors.fill: parent
-                        text: name +" "+delay
-                    }
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            var delay = presetModel.get(index).delay
-                            var name = presetModel.get(index).name
-                            console.log("Index: "+index)
-                            console.log("Preset: "+name+" ,Val:"+delay)
-                            console.log("List Size: "+presetList.count+"\n")
-                            delayLabel.text = qsTr("Delay:" + delay + " MSEC")
-                            delaySlider.value = delay
-                        }
-                    }
-                }
-            }
-            Item {
-                id: saveContainer
-                x: parent.height-50
-                y: parent.y               
-                TextField {
-                    id: saveField
-                    x:saveContainer.x
-                    y:saveContainer.y
-                    width: saveContainer.width
-                    height: 25
-                    text: ""
-                }
-                Button {
-                    id: saveButton
-                    x:parent.x
-                    y:parent.y+25
-                    width: parent.width
-                    height: 25
-                    text: "Save"
-                    onClicked: {
-                        var newPreset = {"name": saveField.text,"delay": delaySlider.value.toFixed(0)}
-                        presetModel.append(newPreset)
-                        fileH.write(saveField.text,delaySlider.value.toFixed(0))
-                        saveField.text = ""
-                    }
-                    FileHandeler {
-                        id: fileH
-                        onError: console.log("Debug"+msg)
-                        source: "presets.txt"
-                    }
-                }
-            }
-        }*/
     }
-
     Item {
         id: contentContainer
         x: 0
@@ -522,11 +673,26 @@ Rectangle {
             radius: 1
             border.width: 1
 
+            Text {
+                id: text1
+                x: 638
+                y: 61
+                width: 93
+                height: 29
+                text: bassVal + " " + midVal + " " + trebleVal + " " + gainVal
+                font.pixelSize: 24
+            }
+            Text {
+                id: text2
+                x: 638
+                y: 108
+                text: delay1Val + " " + delay2Val + " " + chorus1Val + " " + chorus2Val
+                font.pixelSize: 24
+            }
             Equalizer{
                 id: e1
             }
         }
-
         Rectangle {
             id: effect1rec
             x: 0
@@ -541,19 +707,15 @@ Rectangle {
             Delay{
                 id: d1
                 opacity: 0
-
             }
-
             Chorus{
                 id: c1
                 opacity: 0
             }
-
             NoEffect{
                 id: n1
                 opacity: 1
             }
-
             states: [
                 State {
                     name: "No effect"
@@ -616,12 +778,10 @@ Rectangle {
                     }
                     PropertyChanges {
                         target: n1; z: 0
-
                     }
                 }
             ]
         }
-
         Rectangle {
             id: effect2rec
             x: contentContainer.width/2
@@ -632,40 +792,18 @@ Rectangle {
             border.width: 1
             state: "NoEffect"
 
-            Text {
-                id: text1
-                x: 270
-                y: 161
-                width: 93
-                height: 29
-                text: bassVal + " " + midVal + " " + trebleVal + " " + gainVal
-                font.pixelSize: 24
-            }
-
-            Text {
-                id: text2
-                x: 270
-                y: 215
-                text: delay1Val + " " + delay2Val + " " + chorus1Val + " " + chorus2Val
-                font.pixelSize: 24
-            }
-
             Delay{
                 id: d2
                 opacity: 0
             }
-
             Chorus{
                 id: c2
                 opacity: 0
             }
-
             NoEffect{
                 id: n2
                 opacity: 1
             }
-
-
             states: [
                 State {
                     name: "No effect"
@@ -731,11 +869,8 @@ Rectangle {
                         target: n2; z: 0
                     }
                 }
-
             ]
-
         }
-
         Rectangle {
             id: volumerec
             x: eqrec.width
@@ -752,6 +887,283 @@ Rectangle {
                 text1: "Volume"
             }
         }
-
     }
+    Item {
+        id: deBug
+        x: 0
+        y: containerTop.height
+        z: 0
+        opacity: 0
+        width: 1400
+        height: 700
+
+        Rectangle {
+            id: inputRec
+            x: 700
+            y: 0
+            width: 700
+            height: 700
+            border.width: 1
+
+            Text {
+                id: inputText
+                x: 10
+                y: 10
+                width: 100
+                height: 40
+
+                text: qsTr("Input text:")
+                font.pixelSize: 20
+            }
+            Rectangle {
+                id: intextRec
+                x: 10
+                y: 50
+                width: 300
+                height: 40
+                border.width: 1
+
+                TextInput {
+                    id: textInput
+                    anchors.fill: parent
+                    z: 1
+                    opacity: 1
+                    text: "..."
+                    font.pixelSize: 20
+                }
+            }
+            Button {
+                id: sendInput
+                x: 311
+                y: 50
+                width: 100
+                height: 40
+                text: qsTr("Send")
+                onClicked: {
+                    inText += "GUI: " + textInput.text + "\n"
+                }
+            }
+            Button {
+                id: returnToGui
+                x: 560
+                y: 640
+                width: 100
+                height: 40
+                z: 1
+                opacity: 1
+                text: qsTr("Return to GUI")
+                onClicked: {
+                    baseWindow.state = "gui"
+                }
+            }
+            Button {
+                id: clearLog
+                x: 20
+                y: 640
+                width: 100
+                height: 40
+                z: 1
+                opacity: 1
+                text: qsTr("Clear")
+                onClicked: {
+                    inText = ""
+                }
+            }
+        }
+        Rectangle{
+            id: debugRec
+            x: 0
+            y: 0
+            width: 700
+            height: 700
+            border.width: 1
+
+            Text {
+                id: debugInput
+                x: 10
+                y: 10
+                width: 680
+                height: 680
+                text: inText
+                font.pixelSize: 20
+            }
+        }
+    }
+    Item {
+        id: startContainer
+        x: 0
+        y: 0
+        z: 1
+        width: baseWindow.width
+        height: baseWindow.height
+        opacity: 0
+
+        MouseArea {
+            x: 400
+            y: 0
+            z: 1
+            width: 1000
+            height: 100
+        }
+
+        Item {
+            id: setPortS
+            x: 400
+            y: 400
+            anchors.fill: serialContainer
+            opacity: 1
+            z: 1
+
+            Text {
+                id: serialTextS
+                text: qsTr("Available ports:")
+            }
+            Column{
+                id: portColumnS
+                x: 0
+                y: serialText.height
+                spacing: 0
+                width: setPort.width
+                height: setPort.height-serialText.height-serialContainer.height
+
+                ListView{
+                    id: portListS
+                    x: 0
+                    y: 0
+                    width: setPort.width
+                    height: setPort.height-serialText.height-50
+                    highlightFollowsCurrentItem: true
+                    model: ListModel{
+                        id: portlistmodelS
+                    }
+                    Component.onCompleted: {
+                        portlistmodelS.append(serialC.getPortList())
+                    }
+                    delegate: Rectangle {
+                        x: 5
+                        height: 40
+                        width: presetList.width
+                        z: 0
+                        Text {
+                            text: name
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                serialC.setPortS(name)
+                                serialContainer.state = "serialCom"
+                                baseWindow.state = "gui"
+                            }
+                        }
+                    }
+                }
+            }
+            Button {
+                id: renewPortS
+                x: 0
+                y: setPort.height-50
+                width: setPort.width
+                height: 40
+
+                text: qsTr("Get ports")
+                onClicked: {
+                    portlistmodelS.clear()
+                    portlistmodelS.append(serialC.getPortList())
+                    //serialContainer.state = "serialCom"
+                }
+            }
+        }
+    }
+    states: [
+        State {
+            name: "gui"
+            PropertyChanges {
+                target: contentContainer; z: 1
+            }
+            PropertyChanges {
+                target: contentContainer; opacity: 1
+            }
+            PropertyChanges {
+                target: containerRight; z: 1
+            }
+            PropertyChanges {
+                target: containerRight; opacity: 1
+            }
+            PropertyChanges {
+                target: deBug; z: 0
+            }
+            PropertyChanges {
+                target: deBug; opacity: 0
+            }
+            PropertyChanges {
+                target: startContainer; z: 0
+            }
+            PropertyChanges {
+                target: startContainer; opacity: 0
+
+            }
+        },
+        State {
+            name: "debug"
+            PropertyChanges {
+                target: contentContainer; z: 0
+            }
+            PropertyChanges {
+                target: contentContainer; opacity: 0
+            }
+            PropertyChanges {
+                target: containerRight; z: 0
+            }
+            PropertyChanges {
+                target: containerRight; opacity: 0
+            }
+            PropertyChanges {
+                target: deBug; z: 1
+            }
+            PropertyChanges {
+                target: deBug; opacity: 1
+            }
+            PropertyChanges {
+                target: startContainer; z: 0
+            }
+            PropertyChanges {
+                target: startContainer; opacity: 0
+
+            }
+        },
+        State {
+            name: "start"
+            PropertyChanges {
+                target: contentContainer; z: 0
+            }
+            PropertyChanges {
+                target: contentContainer; opacity: 0
+            }
+            PropertyChanges {
+                target: containerRight; z: 0
+            }
+            PropertyChanges {
+                target: containerRight; opacity: 0
+            }
+            PropertyChanges {
+                target: deBug; z: 0
+            }
+            PropertyChanges {
+                target: deBug; opacity: 0
+            }
+            PropertyChanges {
+                target: containerTop; z: 0
+            }
+            PropertyChanges {
+                target: containerTop; opacity: 0.5
+            }
+            PropertyChanges {
+                target: startContainer; z: 1
+            }
+            PropertyChanges {
+                target: startContainer; opacity: 1
+            }
+        }
+    ]
 }

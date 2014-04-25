@@ -21,8 +21,6 @@ Item {
         text1: "Bass"
         sValue: bassStart+12
     }
-
-
     GenericSlider{
         id: midrange
         x: 150
@@ -30,7 +28,6 @@ Item {
         text1: "Midrange"
         sValue: midrangeStart+12
     }
-
     GenericSlider{
         id: treble
         x: 275
@@ -38,7 +35,6 @@ Item {
         text1: "Treble"
         sValue: trebleStart+12
     }
-
     Image {
         id: filterimg
         x: 400
