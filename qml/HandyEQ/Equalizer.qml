@@ -3,7 +3,7 @@ import QtQuick 2.0
 Item {
     x: 0
     y: 0
-    width: 1060
+    width: 480
     height: 350
     opacity: 1
 
@@ -34,13 +34,5 @@ Item {
         y: 60
         text1: "Treble"
         sValue: trebleStart+12
-    }
-    Image {
-        id: filterimg
-        x: 400
-        y: 20
-        width: 600
-        height: 300
-        source: "qrc:/qtquickplugin/images/template_image.png"
     }
 }

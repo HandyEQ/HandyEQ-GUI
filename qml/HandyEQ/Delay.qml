@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 
 Item{
-    width: 630
+    width: 480
     height: 350
     opacity: 1
 
@@ -36,15 +36,17 @@ Item{
         font.pixelSize: 28
     }
     Text {
-        x: 450
-        y: 50
+        x: 251
+        y: 10
         text: "Current value:"
         font.pixelSize: 20
     }
     Text {
-        x: 502
-        y: 80
+        x: 300
+        y: 40
+        width: 110
         text: curDelay + " s"
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         font.pixelSize: 20
     }
 }

@@ -28,7 +28,8 @@ OTHER_FILES += \
     qml/HandyEQ/NoEffect.qml \
     qml/HandyEQ/Equalizer.qml \
     qml/HandyEQ/SerialCom.qml \
-    qml/HandyEQ/Timern.qml
+    qml/HandyEQ/Timern.qml \
+    qml/HandyEQ/DspMenu.qml
 
 HEADERS += \
     serialcom.h \

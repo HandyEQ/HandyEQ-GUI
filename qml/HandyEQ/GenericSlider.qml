@@ -8,7 +8,7 @@ Item{
     property int s: 3
     property int wi: 30
     property int he: 280
-    property int curValue: genSlider.value-12
+    property double curValue: genSlider.value-12
     property int sValue: 12
 
     Slider {

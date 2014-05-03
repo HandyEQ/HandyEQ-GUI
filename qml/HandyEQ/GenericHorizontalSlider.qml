@@ -17,7 +17,7 @@ Item{
         id: sliderHorizontal
         x: 0
         y: 79
-        width: 350
+        width: 300
         height: 30
         stepSize: 1
         value: sValue
@@ -38,7 +38,7 @@ Item{
         font.pixelSize: 28
     }
     Text {
-        x: 330
+        x: 281
         y: 115
         width: 60
         height: 30

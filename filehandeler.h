@@ -18,7 +18,7 @@ class FileHandeler : public QObject
 
         Q_INVOKABLE QJsonArray read();
         Q_INVOKABLE bool write(const QJsonObject &object);
-        Q_INVOKABLE bool removeAll();
+        Q_INVOKABLE bool remove(int r);
 
         QString source()
         {

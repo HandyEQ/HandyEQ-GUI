@@ -1,5 +1,5 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
@@ -16,20 +16,60 @@ Rectangle {
     property int gainVal:   volume.curValue
     property double delay1Val:    d1.curDelay
     property double delay2Val:    d2.curDelay
-    property int chorus1Val:   c1.curChorus
-    property int chorus2Val:   c2.curChorus
+    property double chorus1Val:   c1.curChorus
+    property double chorus2Val:   c2.curChorus
+
+    property int tempVal: 0
+
+    //These values are not done yet.
+    //Values used to store the current first effects and its values.
+    property string dsp1name: {if(effect1rec.state == "Delay")"delay";else "";if(effect1rec.state == "Chorus")"chorus"}
+    property int dsp1val1: {if(effect1rec.state == "Delay")delay1Val*1000;else 0;if(effect1rec.state == "Chorus")chorus1Val}
+    property int dsp1val2: {if(effect1rec.state == "Delay")delay1Val*1000;else 0;if(effect1rec.state == "Chorus")chorus1Val}
+    property int dsp1val3: {if(effect1rec.state == "Delay")delay1Val*1000;else 0;if(effect1rec.state == "Chorus")chorus1Val}
+
+    //Values used to store the current second effects and its values.
+    property string dsp2name: {if(effect2rec.state == "Delay")"delay";else "";if(effect2rec.state == "Chorus")"chorus"}
+    property int dsp2val1: {if(effect2rec.state == "Delay")delay2Val*1000;else 0;if(effect2rec.state == "Chorus")chorus2Val;}
+    property int dsp2val2: {if(effect2rec.state == "Delay")delay1Val*1000;else 0;if(effect2rec.state == "Chorus")chorus1Val}
+    property int dsp2val3: {if(effect2rec.state == "Delay")delay1Val*1000;else 0;if(effect2rec.state == "Chorus")chorus1Val}
+
+    //Values used to store the current third effects and its values.
+    property string dsp3name: {if(effect3rec.state == "Delay")"delay";else "";if(effect3rec.state == "Chorus")"chorus"}
+    property int dsp3val1: {if(effect3rec.state == "Delay")delay1Val*1000;else 0;if(effect3rec.state == "Chorus")chorus1Val}
+    property int dsp3val2: {if(effect3rec.state == "Delay")delay1Val*1000;else 0;if(effect3rec.state == "Chorus")chorus1Val}
+    property int dsp3val3: {if(effect3rec.state == "Delay")delay1Val*1000;else 0;if(effect3rec.state == "Chorus")chorus1Val}
+
+    //Values used to store the current forth effects and its values.
+    property string dsp4name: {if(effect4rec.state == "Delay")"delay";else "";if(effect4rec.state == "Chorus")"chorus"}
+    property int dsp4val1: {if(effect4rec.state == "Delay")delay2Val*1000;else 0;if(effect4rec.state == "Chorus")chorus2Val;}
+    property int dsp4val2: {if(effect4rec.state == "Delay")delay1Val*1000;else 0;if(effect4rec.state == "Chorus")chorus1Val}
+    property int dsp4val3: {if(effect4rec.state == "Delay")delay1Val*1000;else 0;if(effect4rec.state == "Chorus")chorus1Val}
+
     property string inText: ""
-    property string newText: ""
 
     SerialCom{
         id: serialC
         objectName: "serialC"
+        onInDataStringnChanged: {
+            inText = inText + serialC.inDataStringn
+        }
+        onInDatanChanged: {
+            serialR.clear()
+            serialR.append(serialC.inDatan)
+            inText = inText + "New Json data read." + '\n'
+            if(serialR.get(0).dsp1name == "Eq"){
+                inText = inText + serialR.get(0).bass + '\n'
+                e1.bassStart = serialR.get(0).bass
+            }
+        }
     }
-    Timern {
+    //With the new serialCom using signals the timer should not be needed.
+    /*Timern {
         onTriggered:{
             serialR.append(serialC.inDatan)
         }
-    }
+    }*/
     ListModel{
         //This will be used to store the data read from the serial port.
         id: serialR
@@ -62,6 +102,25 @@ Rectangle {
             onClicked: {
                 baseWindow.state = "debug"
             }
+        }
+        Text {
+            id: text1
+            x: 300
+            y: 0
+            width: 93
+            height: 29
+            //text: bassVal + " " + midVal + " " + trebleVal + " " + gainVal
+            text: dsp1name + ": " + dsp1val1
+            font.pixelSize: 24
+        }
+        Text {
+            id: text2
+            x: 300
+            y: 50
+            width: 200
+            //text: delay1Val + " " + delay2Val + " " + chorus1Val + " " + chorus2Val
+            text: dsp2name + ": " + dsp2val1
+            font.pixelSize: 24
         }
         Item {
             id: systemoverview
@@ -115,7 +174,7 @@ Rectangle {
                     font.pixelSize: 28
                 }
             }
-                Rectangle {
+            Rectangle {
                 id: menueffect1
                 x: 550
                 y: 10
@@ -160,7 +219,7 @@ Rectangle {
                     }
                 }
             }
-                Rectangle {
+            Rectangle {
                 id: menueffect2
                 x: 800
                 y: 10
@@ -251,27 +310,33 @@ Rectangle {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
+                            if(removeBox.checked){
+                                fileH.remove(index)
+                                presetModel.remove(index)
+                            }else{
                             e1.bassStart = presetModel.get(index).bass
                             e1.midrangeStart = presetModel.get(index).mid
                             e1.trebleStart = presetModel.get(index).treble
                             volume.sValue = presetModel.get(index).gain*-1
 
-                            if(presetModel.get(index).dsp1.name == "delay"){
+                            if(presetModel.get(index).dsp1name == "delay"){
+                                baseWindow.tempVal = presetModel.get(index).dsp1val1
                                 menuDelay1.checked = true
                                 effect1rec.state = "Delay"
-                                d1.delayStart = presetModel.get(index).dps1.delay
-                            }else if(presetModel.get(index).dsp1.name == "chorus"){
+                                d1.delayStart = tempVal / 1000
+                            }else if(presetModel.get(index).dsp1name == "chorus"){
                                 menuchorus1.checked = true
                                 effect1rec.state = "Chorus"
-                                c1.delayStart = presetModel.get(index).dsp1.val1
                             }else{
                                 menuBase1.checked = true
                                 effect1rec.state = "NoEffect"
                             }
-                            if(presetModel.get(index).dsp2.name == "delay"){
-                                menuDelay2.checked = true
-                                effect2rec.state = "Delay"
-                            }else if(presetModel.get(index).dsp2.name == "chorus"){
+                            if(presetModel.get(index).dsp2name == "delay"){
+                                baseWindow.tempVal = presetModel.get(index).dsp2val1
+                                menudelay2.checked = true
+                                effect2rec.state = "Delay"                                
+                                d2.delayStart = tempVal / 1000
+                            }else if(presetModel.get(index).dsp2name == "chorus"){
                                 menuchorus2.checked = true
                                 effect2rec.state = "Chorus"
                             }else{
@@ -282,30 +347,45 @@ Rectangle {
                             console.log("Index: "+index)
                             console.log("Preset: "+name+" ,bass:"+bassVal+" ,mid:"+midVal+" ,treble:"+trebleVal)
                             console.log("gain:"+gainVal)
-                            console.log("Effect1:"+presetModel.get(index).dsp1.name)
-                            console.log("Effect2:"+presetModel.get(index).dsp2.name)
+                            console.log("Effect1:"+presetModel.get(index).dsp1name)
+                            console.log("Effect2:"+presetModel.get(index).dsp2name)
 
-                            if(presetModel.get(index).dsp1.name == "delay"){
+                            if(presetModel.get(index).dsp1name == "delay"){
                                     console.log("Effect1val: "+delay1Val)
-                            }else if(presetModel.get(index).dsp1.name == "chorus"){
+                            }else if(presetModel.get(index).dsp1name == "chorus"){
                                     console.log("Effect1val: "+chorus1Val)
                                 }
-                            if(presetModel.get(index).dsp2.name == "delay"){
+                            if(presetModel.get(index).dsp2name == "delay"){
                                     console.log("Effect2val: "+delay2Val)
-                            }else if(presetModel.get(index).dsp2.name == "chorus"){
+                            }else if(presetModel.get(index).dsp2name == "chorus"){
                                     console.log("Effect2val: "+chorus2Val)
                                 }
 
                             console.log("List Size: "+presetList.count+"\n")
+                            }
                             }
                     }
                 }
             }
         }
         Item {
-                id: serialContainer
+                id: removeContainer
                 x: 10
                 y: containerRight.height-400
+                width: 120
+                height: 40
+
+                CheckBox {
+                    id: removeBox
+                    x: 5
+                    y: 10
+                    text: qsTr("Remove preset")
+                }
+            }
+        Item {
+                id: serialContainer
+                x: 10
+                y: containerRight.height-350
                 width: 120
                 height: 200
                 state: "setPortList"
@@ -538,7 +618,7 @@ Rectangle {
         Item {
                 id: resetContainer
                 x: 10
-                y: containerRight.height-200
+                y: containerRight.height-150
                 width: 120
                 height: 40
 
@@ -566,16 +646,6 @@ Rectangle {
                 }
             }
         Item {
-                id: removeContainer
-                x: 10
-                y: containerRight.height-150
-                width: 120
-                height: 40
-
-                //Will be used to remove all the presets in the list.
-
-            }
-        Item {
                 id: saveContainer
                 x: 10
                 y: containerRight.height-100
@@ -590,48 +660,19 @@ Rectangle {
                     height: saveContainer.height/2
                     text: qsTr("Save")
                     onClicked: {
-                        var dsp1, dsp2
-                        //Dsp effect one save generation
-                        if(effect1rec.state == "Delay"){
-                            dsp1 = {
-                                "name": "delay",
-                                "delay": delay1Val
-                            }
-                        } else if (effect1rec.state == "Chorus"){
-                            dsp1 = {
-                                "name": "chorus",
-                                "val1": chorus1Val
-                            }
-                        } else {
-                            dsp1 = {
-                                "name": null
-                            }
-                        }
-                        //Dsp effect two save generation
-                        if(effect2rec.state == "Delay"){
-                            dsp2 = {
-                                "name": "delay",
-                                "delay": delay2Val
-                            }
-                        } else if (effect2rec.state == "Chorus"){
-                            dsp2= {
-                                "name": "chorus",
-                                "val1": chorus2Val
-                            }
-                        } else {
-                            dsp2 = {
-                                "name": null
-                            }
-                        }
+                        //Creates a new preset that is to be saved as an Json object.
                         var newPreset = {
                             "name": saveField.text,
                             "gain": gainVal,
                             "bass": bassVal,
                             "mid": midVal,
                             "treble": trebleVal,
-                            "dsp1": dsp1,
-                            "dsp2": dsp2
+                            "dsp1name": dsp1name,
+                            "dsp1val1": dsp1val1,
+                            "dsp2name": dsp2name,
+                            "dsp2val1": dsp2val1
                         }
+
                         presetModel.append(newPreset)
                         fileH.write(newPreset)
                         saveField.text = ""
@@ -654,7 +695,8 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     placeholderText: ""
                 }
-            }
+        }
+
     }
     Item {
         id: contentContainer
@@ -667,30 +709,57 @@ Rectangle {
             id: eqrec
             x: 0
             y: 0
-            width: 1060
+            width: contentContainer.width/2
             height: contentContainer.height/2
             color: "#ffffff"
             radius: 1
             border.width: 1
 
-            Text {
-                id: text1
-                x: 638
-                y: 61
-                width: 93
-                height: 29
-                text: bassVal + " " + midVal + " " + trebleVal + " " + gainVal
-                font.pixelSize: 24
-            }
-            Text {
-                id: text2
-                x: 638
-                y: 108
-                text: delay1Val + " " + delay2Val + " " + chorus1Val + " " + chorus2Val
-                font.pixelSize: 24
-            }
             Equalizer{
                 id: e1
+            }
+
+            Item {
+                id: dsp1menu
+                x: 480
+                y: 0
+                width: contentContainer.width/2 - 480
+                height: contentContainer.height/2
+
+                DspMenu{
+                    id: dsp1m
+                    x: 1
+                    y: 1
+                }
+            }
+        }
+        Rectangle {
+            id: volumerec
+            x: eqrec.width
+            y: 0
+            width: contentContainer.width/2
+            height: contentContainer.height/2
+            radius: 1
+            border.width: 1
+
+            GenericGainSlider{
+                id: volume
+                x: 40
+                y: 60
+                text1: "Volume"
+            }
+            Item {
+                id: dsp2menu
+                x: 480
+                y: 0
+                width: contentContainer.width/2 - 480
+                height: contentContainer.height/2
+
+                DspMenu{
+                    id: dsp2m
+                    x: 1
+                    y: 1
+                }
             }
         }
         Rectangle {
@@ -715,6 +784,19 @@ Rectangle {
             NoEffect{
                 id: n1
                 opacity: 1
+            }
+            Item {
+                id: dsp3menu
+                x: 480
+                y: 0
+                width: contentContainer.width/2 - 480
+                height: contentContainer.height/2
+
+                DspMenu{
+                    id: dsp3m
+                    x: 1
+                    y: 1
+                }
             }
             states: [
                 State {
@@ -804,6 +886,19 @@ Rectangle {
                 id: n2
                 opacity: 1
             }
+            Item {
+                id: dsp4men
+                x: 480
+                y: 0
+                width: contentContainer.width/2 - 480
+                height: contentContainer.height/2
+
+                DspMenu{
+                    id: dsp4m
+                    x: 1
+                    y: 1
+                }
+            }
             states: [
                 State {
                     name: "No effect"
@@ -870,22 +965,6 @@ Rectangle {
                     }
                 }
             ]
-        }
-        Rectangle {
-            id: volumerec
-            x: eqrec.width
-            y: 0
-            width: contentContainer.width-eqrec.width
-            height: contentContainer.height/2
-            radius: 1
-            border.width: 1
-
-            GenericGainSlider{
-                id: volume
-                x: 40
-                y: 60
-                text1: "Volume"
-            }
         }
     }
     Item {
@@ -1010,7 +1089,6 @@ Rectangle {
             id: setPortS
             x: 400
             y: 400
-            anchors.fill: serialContainer
             opacity: 1
             z: 1
 
@@ -1130,6 +1208,11 @@ Rectangle {
             PropertyChanges {
                 target: startContainer; opacity: 0
 
+            }
+
+            PropertyChanges {
+                target: debugInput
+                wrapMode: "WrapAtWordBoundaryOrAnywhere"
             }
         },
         State {
