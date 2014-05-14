@@ -8,11 +8,6 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QDebug>
 
-/*SerialCom *serial;
-QObject *object;
-void readCom();
-*/
-
 //Main function
 int main(int argc, char *argv[])
 {
@@ -24,25 +19,9 @@ int main(int argc, char *argv[])
 
     viewer.setMainQmlFile(QStringLiteral("qml/HandyEQ/main.qml"));
     viewer.showExpanded();
-    /*QQuickView view;
-    view.setSource(QUrl::fromLocalFile("main.qml"));
-    object = view.rootObject();
-    QFuture<void> future = QtConcurrent::run(readCom);
-    */
+
     int temp = app.exec();
 
     return temp;
 }
 
-/*void readCom(){
-    while(true){
-        serial = object->findChild<SerialCom*>("serialC");
-        qDebug() << &serial;
-        qDebug() << serial->hej;
-        if(serial->portOpen)
-        {
-            serial->readData();
-        }
-        qDebug() <<"hej";
-    }
-}*/

@@ -29,7 +29,7 @@ public:
     //These send funcions will be used to send data on the serial port
     //either as a Json object or as a string.
     Q_INVOKABLE bool sendData(const QJsonObject &object);
-    Q_INVOKABLE bool sendDataDe(const QString send);
+    Q_INVOKABLE bool sendDataDe(const QString outData);
     //These functions are used to chose what port to use, to set it up and to open/close it.
     Q_INVOKABLE QJsonArray getPortList();
     Q_INVOKABLE bool setPortS(QString portS);
@@ -73,6 +73,8 @@ signals:
     void inDataStringnChanged(const QString &dataString);
 
 public slots:
+    //This function will be used to convert an int value into a 6 char string with the sign on the left.
+    Q_INVOKABLE QString valToChar(int val);
     //Thse functions are not currently being used.
     void setPort(QSerialPort* &port){
         mPort = port;
