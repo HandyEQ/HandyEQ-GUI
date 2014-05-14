@@ -6,9 +6,12 @@ Item{
     //text1 is used to set the lable of the slider from outside this qml file.
     property string text1: "value"
     //This variable is used to be able to read the value of the slider from outside this qml file.
-    property int curValue: 0-gainSlide.value
+    property int curValue: 0
     //This value is used to change the setting(slider) of the gain.
     property int sValue: 0
+    onSValueChanged: {
+        curValue = -sValue
+    }
 
     Slider {
         //Slider for displaying and changing the gain.
@@ -26,8 +29,8 @@ Item{
         value: sValue
         orientation: 0
         //When the slider is moved the curValue is updated.
-        onValueChanged: {
-            curValue = -gainSlide.value
+        onPressedChanged: {
+            curValue = 0-gainSlide.value
         }
     }
     Text {
@@ -72,7 +75,7 @@ Item{
         x: 65
         y: 68
         height: 26
-        text: curValue + " dB"
+        text: -gainSlide.value + " dB"
         font.pixelSize: 12
     }
 }

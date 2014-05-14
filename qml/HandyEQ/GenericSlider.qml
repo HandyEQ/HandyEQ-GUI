@@ -15,9 +15,12 @@ Item{
     property int wi: 30
     property int he: 280
     //This variable is used to be able to read the value of the slider from outside this qml file.
-    property double curValue: genSlider.value-12
+    property double curValue: 0
     //This variable is used to change the value of the slider from outside this qml file.
     property int sValue: 12
+    onSValueChanged: {
+        curValue = sValue-12
+    }
 
     Slider {
         //Slider for changing settings.
@@ -33,7 +36,7 @@ Item{
         minimumValue: minval
         orientation: 0
         //When the slider value is changed it updates the curValue variable.
-        onValueChanged: {
+        onPressedChanged: {
             curValue = genSlider.value-12
         }
     }
@@ -81,7 +84,7 @@ Item{
         y: 36
         width: 76
         height: 26
-        text: "Current value: \n" + curValue + " dB"
+        text: "Current value: \n" + (genSlider.value-12) + " dB"
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 12

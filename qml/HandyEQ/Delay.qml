@@ -12,21 +12,26 @@ Item{
     //Remodel, all sliders vertical, feedback should have from 0-1 values without a unit, remove the unit for the gain.
     //These variables are used when reading the current values from the sliders, these values are updated when the
     //values are changed on the slider connected to the variable.
-    property double curDelay: tempDelay/10
-    //Used to get rid of unwanted values that occur when dividing ints.
-    property int tempDelay: secSlider.value
-    property double curGain: tempGain/100
-    //Used to get rid of unwanted values that occur when dividing ints.
-    property int tempGain: gainSlider.value
-    property double curFeedback: tempFeedback/100
-    //Used to get rid of unwanted values that occur when dividing ints.
-    property int tempFeedback: feedbackSlider.value
+    property double curDelay: 0
+    property double curGain: 0
+    property double curFeedback: 0
     //These variables are used when changing the values of the delay settings(sliders).
     property double delayStart: 0
     property double gainStart: 0
     property double feedbackStart: 0
     //This is used to scale down the start value to fit the delay slider.
     property int delayStartS: delayStart*10
+    //Used to get rid of unwanted values that occur when dividing ints.
+    property int tempFeedback: 0
+    onDelayStartChanged: {
+        curDelay = delayStart
+    }
+    onGainStartChanged: {
+        curGain = gainStart
+    }
+    onFeedbackStartChanged: {
+        curFeedback = feedbackStart
+    }
 
     Item {
         //Slider for the delay setting.
@@ -44,8 +49,12 @@ Item{
             height: 280
             minimumValue: 0
             maximumValue: 20
+            stepSize: 1
             value: delayStartS
             orientation: 0
+            onPressedChanged: {
+                curDelay = secSlider.value/10
+            }
         }
         Text {
             x: 35
@@ -62,7 +71,7 @@ Item{
         Text {
             x: 40
             y: 90
-            text: "Current value: \n" + curDelay + "s"
+            text: "Current value: \n" + secSlider.value/10 + "s"
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: 12
@@ -94,8 +103,12 @@ Item{
             height: 280
             minimumValue: 0
             maximumValue: 100
+            stepSize: 1
             value: gainStart*100
             orientation: 0
+            onPressedChanged: {
+                curGain = gainSlider.value/100
+            }
         }
         Text {
             x: 35
@@ -113,7 +126,7 @@ Item{
         Text {
             x: 40
             y: 90
-            text: "Current value: \n" + curGain
+            text: "Current value: \n" + gainSlider.value/100
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: 12
@@ -145,8 +158,12 @@ Item{
             height: 280
             minimumValue: 0
             maximumValue: 100
+            stepSize: 1
             value: feedbackStart*100
             orientation: 0
+            onPressedChanged: {
+                curFeedback = feedbackSlider.value/100
+            }
         }
         Text {
             x: 35
@@ -163,7 +180,7 @@ Item{
         Text {
             x: 40
             y: 90
-            text: "Current value: \n" + curFeedback
+            text: "Current value: \n" + feedbackSlider.value/100
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: 12

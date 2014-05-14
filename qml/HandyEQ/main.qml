@@ -24,6 +24,8 @@ Rectangle {
 
     //This variable is to stop the GUI from sending the new value when received a segment from the serialport.
     property bool receive: false
+    property bool sendAll: false
+    property int changedEffect: 0
 
     //These variables are only used when sending on the serial port.
     //Float points are calculatedwith (2^15)*value or 32768*value, float points are used for the delay feedback and gain.
@@ -79,183 +81,225 @@ Rectangle {
     //This part allows the GUI to send to the board when a value has been changed.
     //When a value is changed it is to be sent to the board.
     onD1v1Changed: {
-        if(effect1rec.state == "equalizer"){
-            //Will tell the board the value of the bass.
-            tempString = tempString + '1' + 'E' + 'B' + 'A' + d1v1 + '#'
-        }else if(effect1rec.state == "volume"){
-            //Will tell the board the value of the gain.
-            tempString = tempString + '1' + 'V' + 'G' + 'A' + d1v1 + '#'
-        }else if(effect1rec.state == "delay"){
-            //Will tell the board the value of the delay time.
-            tempString = tempString + '1' + 'D' + 'D' + 'T' + d1v1 + '#'
+        if(changedEffect == 0){
+            if(effect1rec.state == "equalizer"){
+                //Will tell the board the value of the bass.
+                tempString = tempString + '1' + 'E' + 'B' + 'A' + d1v1 + '#'
+            }else if(effect1rec.state == "volume"){
+                //Will tell the board the value of the gain.
+                tempString = tempString + '1' + 'V' + 'G' + 'A' + d1v1 + '#'
+            }else if(effect1rec.state == "delay"){
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '1' + 'D' + 'D' + 'T' + d1v1 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%4
         }
     }
     onD1v2Changed: {
-        if(effect1rec.state == "equalizer"){
-            //Will tell the board the value of the mid.
-            tempString = tempString + '1' + 'E' + 'M' + 'I' + d1v2 + '#'
-        }else if(effect1rec.state == "delay"){
-            //Will tell the board the value of the gain.
-            tempString = tempString + '1' + 'D' + 'G' + 'A' + d1v2 + '#'
+        if(changedEffect == 0){
+            if(effect1rec.state == "equalizer"){
+                //Will tell the board the value of the mid.
+                tempString = tempString + '1' + 'E' + 'M' + 'I' + d1v2 + '#'
+            }else if(effect1rec.state == "delay"){
+                //Will tell the board the value of the gain.
+                tempString = tempString + '1' + 'D' + 'G' + 'A' + d1v2 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     onD1v3Changed: {
-        if(effect1rec.state == "equalizer"){
-            //Will tell the board the value of the treble.
-            tempString = tempString + '1' + 'E' + 'T' + 'R' + d1v3 + '#'
-        }else if(effect1rec.state == "delay"){
-            //Will tell the board the value of the delay time.
-            tempString = tempString + '1' + 'D' + 'F' + 'B' + d1v3 + '#'
+        if(changedEffect == 0){
+            if(effect1rec.state == "equalizer"){
+                //Will tell the board the value of the treble.
+                tempString = tempString + '1' + 'E' + 'T' + 'R' + d1v3 + '#'
+            }else if(effect1rec.state == "delay"){
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '1' + 'D' + 'F' + 'B' + d1v3 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     //When a value is changed it is to be sent to the board.
     onD2v1Changed: {
-        if(effect2rec.state == "equalizer"){
-            //Will tell the board the value of the bass.
-            tempString = tempString + '2' + 'E' + 'B' + 'A' + d2v1 + '#'
-        }else if(effect2rec.state == "volume"){
-            //Will tell the board the value of the gain.
-            tempString = tempString + '2' + 'V' + 'G' + 'A' + d2v1 + '#'
-        }else if(effect2rec.state == "delay"){
-            //Will tell the board the value of the delay time.
-            tempString = tempString + '2' + 'D' + 'D' + 'T' + d2v1 + '#'
+        if(changedEffect == 0){
+            if(effect2rec.state == "equalizer"){
+                //Will tell the board the value of the bass.
+                tempString = tempString + '2' + 'E' + 'B' + 'A' + d2v1 + '#'
+            }else if(effect2rec.state == "volume"){
+                //Will tell the board the value of the gain.
+                tempString = tempString + '2' + 'V' + 'G' + 'A' + d2v1 + '#'
+            }else if(effect2rec.state == "delay"){
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '2' + 'D' + 'D' + 'T' + d2v1 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     onD2v2Changed: {
-        if(effect2rec.state == "equalizer"){
-            //Will tell the board the value of the mid.
-            tempString = tempString + '2' + 'E' + 'M' + 'I' + d2v2 + '#'
-        }else if(effect2rec.state == "delay"){
-            //Will tell the board the value of the gain.
-            tempString = tempString + '2' + 'D' + 'G' + 'A' + d2v2 + '#'
+        if(changedEffect == 0 ){
+            if(effect2rec.state == "equalizer"){
+                //Will tell the board the value of the mid.
+                tempString = tempString + '2' + 'E' + 'M' + 'I' + d2v2 + '#'
+            }else if(effect2rec.state == "delay"){
+                //Will tell the board the value of the gain.
+                tempString = tempString + '2' + 'D' + 'G' + 'A' + d2v2 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     onD2v3Changed: {
-        if(effect2rec.state == "equalizer"){
-            //Will tell the board the value of the treble.
-            tempString = tempString + '2' + 'E' + 'T' + 'R' + d2v3 + '#'
-        }else if(effect2rec.state == "delay"){
-            //Will tell the board the value of the delay time.
-            tempString = tempString + '2' + 'D' + 'F' + 'B' + d2v3 + '#'
+        if(changedEffect == 0){
+            if(effect2rec.state == "equalizer"){
+                //Will tell the board the value of the treble.
+                tempString = tempString + '2' + 'E' + 'T' + 'R' + d2v3 + '#'
+            }else if(effect2rec.state == "delay"){
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '2' + 'D' + 'F' + 'B' + d2v3 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     //When a value is changed it is to be sent to the board.
     onD3v1Changed: {
-        if(effect3rec.state == "equalizer"){
-            //Will tell the board the value of the bass.
-            tempString = tempString + '3' + 'E' + 'B' + 'A' + d3v1 + '#'
-        }else if(effect3rec.state == "volume"){
-            //Will tell the board the value of the gain.
-            tempString = tempString + '3' + 'V' + 'G' + 'A' + d3v1 + '#'
-        }else if(effect3rec.state == "delay"){
-            //Will tell the board the value of the delay time.
-            tempString = tempString + '3' + 'D' + 'D' + 'T' + d3v1 + '#'
+        if(changedEffect == 0){
+            if(effect3rec.state == "equalizer"){
+                //Will tell the board the value of the bass.
+                tempString = tempString + '3' + 'E' + 'B' + 'A' + d3v1 + '#'
+            }else if(effect3rec.state == "volume"){
+                //Will tell the board the value of the gain.
+                tempString = tempString + '3' + 'V' + 'G' + 'A' + d3v1 + '#'
+            }else if(effect3rec.state == "delay"){
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '3' + 'D' + 'D' + 'T' + d3v1 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     onD3v2Changed: {
-        if(effect3rec.state == "equalizer"){
-            //Will tell the board the value of the mid.
-            tempString = tempString + '3' + 'E' + 'M' + 'I' + d3v2 + '#'
-        }else if(effect3rec.state == "delay"){
-            //Will tell the board the value of the gain.
-            tempString = tempString + '3' + 'D' + 'G' + 'A' + d3v2 + '#'
+        if(changedEffect == 0){
+            if(effect3rec.state == "equalizer"){
+                //Will tell the board the value of the mid.
+                tempString = tempString + '3' + 'E' + 'M' + 'I' + d3v2 + '#'
+            }else if(effect3rec.state == "delay"){
+                //Will tell the board the value of the gain.
+                tempString = tempString + '3' + 'D' + 'G' + 'A' + d3v2 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     onD3v3Changed: {
-        if(effect3rec.state == "equalizer"){
-            //Will tell the board the value of the treble.
-            tempString = tempString + '3' + 'E' + 'T' + 'R' + d3v3 + '#'
-        }else if(effect3rec.state == "delay"){
-            //Will tell the board the value of the delay time.
-            tempString = tempString + '3' + 'D' + 'F' + 'B' + d3v3 + '#'
+        if(changedEffect == 0){
+            if(effect3rec.state == "equalizer"){
+                //Will tell the board the value of the treble.
+                tempString = tempString + '3' + 'E' + 'T' + 'R' + d3v3 + '#'
+            }else if(effect3rec.state == "delay"){
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '3' + 'D' + 'F' + 'B' + d3v3 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     //When a value is changed from effect 3 it is to be sent to the board.
     onD4v1Changed: {
-        if(effect4rec.state == "equalizer"){
-            //Will tell the board the value of the bass.
-            tempString = tempString + '4' + 'E' + 'B' + 'A' + d4v1 + '#'
-        }else if(effect4rec.state == "volume"){
-            //Will tell the board the value of the gain.
-            tempString = tempString + '4' + 'V' + 'G' + 'A' + d4v1 + '#'
-        }else if(effect4rec.state == "delay"){
-            //Will tell the board the value of the delay time.
-            tempString = tempString + '4' + 'D' + 'D' + 'T' + d4v1 + '#'
+        if(changedEffect == 0){
+            if(effect4rec.state == "equalizer"){
+                //Will tell the board the value of the bass.
+                tempString = tempString + '4' + 'E' + 'B' + 'A' + d4v1 + '#'
+            }else if(effect4rec.state == "volume"){
+                //Will tell the board the value of the gain.
+                tempString = tempString + '4' + 'V' + 'G' + 'A' + d4v1 + '#'
+            }else if(effect4rec.state == "delay"){
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '4' + 'D' + 'D' + 'T' + d4v1 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     onD4v2Changed: {
-        if(effect4rec.state == "equalizer"){
-            //Will tell the board the value of the mid.
-            tempString = tempString + '4' + 'E' + 'M' + 'I' + d4v2 + '#'
-        }else if(effect4rec.state == "delay"){
-            //Will tell the board the value of the gain.
-            tempString = tempString + '4' + 'D' + 'G' + 'A' + d4v2 + '#'
+        if(changedEffect == 0){
+            if(effect4rec.state == "equalizer"){
+                //Will tell the board the value of the mid.
+                tempString = tempString + '4' + 'E' + 'M' + 'I' + d4v2 + '#'
+            }else if(effect4rec.state == "delay"){
+                //Will tell the board the value of the gain.
+                tempString = tempString + '4' + 'D' + 'G' + 'A' + d4v2 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     onD4v3Changed: {
-        if(effect4rec.state == "equalizer"){
-            //Will tell the board the value of the treble.
-            tempString = tempString + '4' + 'E' + 'T' + 'R' + d4v3 + '#'
-        }else if(effect4rec.state == "delay"){
-            //Will tell the board the value of the delay time.
-            tempString = tempString + '4' + 'D' + 'F' + 'B' + d4v3 + '#'
+        if(changedEffect == 0){
+            if(effect4rec.state == "equalizer"){
+                //Will tell the board the value of the treble.
+                tempString = tempString + '4' + 'E' + 'T' + 'R' + d4v3 + '#'
+            }else if(effect4rec.state == "delay"){
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '4' + 'D' + 'F' + 'B' + d4v3 + '#'
+            }else{
+                //No value to send.
+            }
         }else{
-            //No value to send.
+            changedEffect = (changedEffect + 1)%5
         }
     }
     //When an effect is changed it is to be sent to the board.
     onDsp1nameChanged: {
         if(effect1rec.state == "equalizer"){
             //Will tell the board that the effect in the first box should be equalizer.
-            tempString = 'S' + '1' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = 'S' + '1' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the bass.
             tempString = tempString + '1' + 'E' + 'B' + 'A' + d1v1 + ':'
             //Will tell the board the value of the mid.
             tempString = tempString + '1' + 'E' + 'M' + 'I' + d1v2 + ':'
             //Will tell the board the value of the bass.
             tempString = tempString + '1' + 'E' + 'T' + 'R' + d1v3 + '#'
-            */
         }else if(effect1rec.state == "volume"){
             //Will tell the board that the effect in the first box should be volume.
-            tempString = 'S' + '1' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = 'S' + '1' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the gain.
             tempString = tempString + '1' + 'V' + 'G' + 'A' + d1v1 + '#'
-            */
         }else if(effect1rec.state == "delay"){
             //Will tell the board that the effect in the first box should be delay.
-            tempString = 'S' + '1' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = 'S' + '1' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the delay time.
             tempString = tempString + '1' + 'D' + 'D' + 'T' + d1v1 + ':'
             //Will tell the board the value of the gain.
             tempString = tempString + '1' + 'D' + 'G' + 'A' + d1v2 + ':'
             //Will tell the board the value of the feedback.
             tempString = tempString + '1' + 'D' + 'F' + 'B' + d1v3 + '#'
-            */
         }else if(effect1rec.state == "noEffect"){
             //Will tell the board that the effect in the first box should be noeffect.
             tempString = 'S' + '1' + 'E' + '1' + 'N' + 'E' + '0' + '0' + '0' + '0' + '#'
@@ -265,38 +309,33 @@ Rectangle {
             tempString = 'S' + '1' + 'E' + '0' + 'B' + 'Y' + '0' + '0' + '0' + '0' + '#'
             //No values are used here.
         }
+        changedEffect = 1
     }
     //When an effect is changed it is to be sent to the board.
     onDsp2nameChanged: {
         if(effect2rec.state == "equalizer"){
             //Will tell the board that the effect in the second box should be equalizer.
-            tempString = tempString + 'S' + '2' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = tempString + 'S' + '2' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the bass.
             tempString = tempString + '2' + 'E' + 'B' + 'A' + d2v1 + ':'
             //Will tell the board the value of the mid.
             tempString = tempString + '2' + 'E' + 'M' + 'I' + d2v2 + ':'
             //Will tell the board the value of the bass.
             tempString = tempString + '2' + 'E' + 'T' + 'R' + d2v3 + '#'
-            */
         }else if(effect2rec.state == "volume"){
             //Will tell the board that the effect in the second box should be volume.
-            tempString = tempString + 'S' + '2' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = tempString + 'S' + '2' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the gain.
             tempString = tempString + '2' + 'V' + 'G' + 'A' + d2v1 + '#'
-            */
         }else if(effect2rec.state == "delay"){
             //Will tell the board that the effect in the second box should be delay.
-            tempString = tempString + 'S' + '2' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = tempString + 'S' + '2' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the delay time.
             tempString = tempString + '2' + 'D' + 'D' + 'T' + d2v1 + ':'
             //Will tell the board the value of the gain.
             tempString = tempString + '2' + 'D' + 'G' + 'A' + d2v2 + ':'
             //Will tell the board the value of the feedback.
             tempString = tempString + '2' + 'D' + 'F' + 'B' + d2v3 + '#'
-            */
         }else if(effect2rec.state == "noEffect"){
             //Will tell the board that the effect in the second box should be noeffect.
             tempString = tempString + 'S' + '2' + 'E' + '1' + 'N' + 'E' + '0' + '0' + '0' + '0' + '#'
@@ -306,38 +345,33 @@ Rectangle {
             tempString = tempString + 'S' + '2' + 'E' + '0' + 'B' + 'Y' + '0' + '0' + '0' + '0' + '#'
             //No values are used here.
         }
+        changedEffect = 1
     }
     //When an effect is changed it is to be sent to the board.
     onDsp3nameChanged: {
         if(effect3rec.state == "equalizer"){
             //Will tell the board that the effect in the third box should be equalizer.
-            tempString = tempString + 'S' + '3' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = tempString + 'S' + '3' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the bass.
             tempString = tempString + '3' + 'E' + 'B' + 'A' + d3v1 + ':'
             //Will tell the board the value of the mid.
             tempString = tempString + '3' + 'E' + 'M' + 'I' + d3v2 + ':'
             //Will tell the board the value of the bass.
             tempString = tempString + '3' + 'E' + 'T' + 'R' + d3v3 + '#'
-            */
         }else if(effect3rec.state == "volume"){
             //Will tell the board that the effect in the third box should be volume.
-            tempString = tempString + 'S' + '3' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = tempString + 'S' + '3' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the gain.
             tempString = tempString + '3' + 'V' + 'G' + 'A' + d3v1 + '#'
-            */
         }else if(effect3rec.state == "delay"){
             //Will tell the board that the effect in the third box should be delay.
-            tempString = tempString + 'S' + '3' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = tempString + 'S' + '3' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the delay time.
             tempString = tempString + '3' + 'D' + 'D' + 'T' + d3v1 + ':'
             //Will tell the board the value of the gain.
             tempString = tempString + '3' + 'D' + 'G' + 'A' + d3v2 + ':'
             //Will tell the board the value of the feedback.
             tempString = tempString + '3' + 'D' + 'F' + 'B' + d3v3 + '#'
-            */
         }else if(effect3rec.state == "noEffect"){
             //Will tell the board that the effect in the third box should be noeffect.
             tempString = tempString + 'S' + '3' + 'E' + '1' + 'N' + 'E' + '0' + '0' + '0' + '0' + '#'
@@ -347,38 +381,33 @@ Rectangle {
             tempString = tempString + 'S' + '3' + 'E' + '0' + 'B' + 'Y' + '0' + '0' + '0' + '0' + '#'
             //No values are used here.
         }
+        changedEffect = 1
     }
     //When an effect is changed it is to be sent to the board.
     onDsp4nameChanged: {
         if(effect4rec.state == "equalizer"){
             //Will tell the board that the effect in the fourth box should be equalizer.
-            tempString = tempString + 'S' + '4' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = tempString + 'S' + '4' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the bass.
             tempString = tempString + '4' + 'E' + 'B' + 'A' + d4v1 + ':'
             //Will tell the board the value of the mid.
             tempString = tempString + '4' + 'E' + 'M' + 'I' + d4v2 + ':'
             //Will tell the board the value of the bass.
             tempString = tempString + '4' + 'E' + 'T' + 'R' + d4v3 + '#'
-            */
         }else if(effect4rec.state == "volume"){
             //Will tell the board that the effect in the fourth box should be volume.
-            tempString = tempString + 'S' + '4' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = tempString + 'S' + '4' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the gain.
             tempString = tempString + '4' + 'V' + 'G' + 'A' + d4v1 + '#'
-            */
         }else if(effect4rec.state == "delay"){
             //Will tell the board that the effect in the fourth box should be delay.
-            tempString = tempString + 'S' + '4' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + '#'
-            /*
+            tempString = tempString + 'S' + '4' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + ':'
             //Will tell the board the value of the delay time.
             tempString = tempString + '4' + 'D' + 'D' + 'T' + d4v1 + ':'
             //Will tell the board the value of the gain.
             tempString = tempString + '4' + 'D' + 'G' + 'A' + d4v2 + ':'
             //Will tell the board the value of the feedback.
             tempString = tempString + '4' + 'D' + 'F' + 'B' + d4v3 + '#'
-            */
         }else if(effect4rec.state == "noEffect"){
             //Will tell the board that the effect in the fourth box should be noeffect.
             tempString = tempString + 'S' + '4' + 'E' + '1' + 'N' + 'E' + '0' + '0' + '0' + '0' + '#'
@@ -387,6 +416,152 @@ Rectangle {
             //Will tell the board that the effect in the fourth box should be bypassed.
             tempString = tempString + 'S' + '4' + 'E' + '0' + 'B' + 'Y' + '0' + '0' + '0' + '0' + '#'
             //No values are used here.
+        }
+        changedEffect = 1
+    }
+    onSendAllChanged: {
+        if(sendAll == true){
+            //Sorts the format that the values are to be sent in.
+            //Clears the string used to store the message send to the board.
+            tempString = ""
+            //Creates a String that is to be sent to the Board.
+            //Looks what the first effect is.
+            if(effect1rec.state == "equalizer"){
+                //Will tell the board that the effect in the first box should be equalizer.
+                tempString = 'S' + '1' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the bass.
+                tempString = tempString + '1' + 'E' + 'B' + 'A' + d1v1 + ':'
+                //Will tell the board the value of the mid.
+                tempString = tempString + '1' + 'E' + 'M' + 'I' + d1v2 + ':'
+                //Will tell the board the value of the bass.
+                tempString = tempString + '1' + 'E' + 'T' + 'R' + d1v3 + ':'
+            }else if(effect1rec.state == "volume"){
+                //Will tell the board that the effect in the first box should be volume.
+                tempString = 'S' + '1' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the gain.
+                tempString = tempString + '1' + 'V' + 'G' + 'A' + d1v1 + ':'
+            }else if(effect1rec.state == "delay"){
+                //Will tell the board that the effect in the first box should be delay.
+                tempString = 'S' + '1' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '1' + 'D' + 'D' + 'T' + d1v1 + ':'
+                //Will tell the board the value of the gain.
+                tempString = tempString + '1' + 'D' + 'G' + 'A' + d1v2 + ':'
+                //Will tell the board the value of the feedback.
+                tempString = tempString + '1' + 'D' + 'F' + 'B' + d1v3 + ':'
+            }else if(effect1rec.state == "noEffect"){
+                //Will tell the board that the effect in the first box should be noeffect.
+                tempString = 'S' + '1' + 'E' + '1' + 'N' + 'E' + '0' + '0' + '0' + '0' + ':'
+                //No values are used here.
+            }else{
+                //Will tell the board that the effect in the first box should be bypassed.
+                tempString = 'S' + '1' + 'E' + '0' + 'B' + 'Y' + '0' + '0' + '0' + '0' + ':'
+                //No values are used here.
+            }
+            //Looks what the second effect is.
+            if(effect2rec.state == "equalizer"){
+                //Will tell the board that the effect in the second box should be equalizer.
+                tempString = tempString + 'S' + '2' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the bass.
+                tempString = tempString + '2' + 'E' + 'B' + 'A' + d2v1 + ':'
+                //Will tell the board the value of the mid.
+                tempString = tempString + '2' + 'E' + 'M' + 'I' + d2v2 + ':'
+                //Will tell the board the value of the bass.
+                tempString = tempString + '2' + 'E' + 'T' + 'R' + d2v3 + ':'
+            }else if(effect2rec.state == "volume"){
+                //Will tell the board that the effect in the second box should be volume.
+                tempString = tempString + 'S' + '2' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the gain.
+                tempString = tempString + '2' + 'V' + 'G' + 'A' + d2v1 + ':'
+            }else if(effect2rec.state == "delay"){
+                //Will tell the board that the effect in the second box should be delay.
+                tempString = tempString + 'S' + '2' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '2' + 'D' + 'D' + 'T' + d2v1 + ':'
+                //Will tell the board the value of the gain.
+                tempString = tempString + '2' + 'D' + 'G' + 'A' + d2v2 + ':'
+                //Will tell the board the value of the feedback.
+                tempString = tempString + '2' + 'D' + 'F' + 'B' + d2v3 + ':'
+            }else if(effect2rec.state == "noEffect"){
+                //Will tell the board that the effect in the second box should be noeffect.
+                tempString = tempString + 'S' + '2' + 'E' + '1' + 'N' + 'E' + '0' + '0' + '0' + '0' + ':'
+                //No values are used here.
+            }else{
+                //Will tell the board that the effect in the second box should be bypassed.
+                tempString = tempString + 'S' + '2' + 'E' + '0' + 'B' + 'Y' + '0' + '0' + '0' + '0' + ':'
+                //No values are used here.
+            }
+            //Looks what the third effect is.
+            if(effect3rec.state == "equalizer"){
+                //Will tell the board that the effect in the third box should be equalizer.
+                tempString = tempString + 'S' + '3' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the bass.
+                tempString = tempString + '3' + 'E' + 'B' + 'A' + d3v1 + ':'
+                //Will tell the board the value of the mid.
+                tempString = tempString + '3' + 'E' + 'M' + 'I' + d3v2 + ':'
+                //Will tell the board the value of the bass.
+                tempString = tempString + '3' + 'E' + 'T' + 'R' + d3v3 + ':'
+            }else if(effect3rec.state == "volume"){
+                //Will tell the board that the effect in the third box should be volume.
+                tempString = tempString + 'S' + '3' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the gain.
+                tempString = tempString + '3' + 'V' + 'G' + 'A' + d3v1 + ':'
+            }else if(effect3rec.state == "delay"){
+                //Will tell the board that the effect in the third box should be delay.
+                tempString = tempString + 'S' + '3' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '3' + 'D' + 'D' + 'T' + d3v1 + ':'
+                //Will tell the board the value of the gain.
+                tempString = tempString + '3' + 'D' + 'G' + 'A' + d3v2 + ':'
+                //Will tell the board the value of the feedback.
+                tempString = tempString + '3' + 'D' + 'F' + 'B' + d3v3 + ':'
+            }else if(effect3rec.state == "noEffect"){
+                //Will tell the board that the effect in the third box should be noeffect.
+                tempString = tempString + 'S' + '3' + 'E' + '1' + 'N' + 'E' + '0' + '0' + '0' + '0' + ':'
+                //No values are used here.
+            }else{
+                //Will tell the board that the effect in the third box should be bypassed.
+                tempString = tempString + 'S' + '3' + 'E' + '0' + 'B' + 'Y' + '0' + '0' + '0' + '0' + ':'
+                //No values are used here.
+            }
+            //Looks what the fourth effect is.
+            if(effect4rec.state == "equalizer"){
+                //Will tell the board that the effect in the fourth box should be equalizer.
+                tempString = tempString + 'S' + '4' + 'E' + '2' + 'E' + 'Q' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the bass.
+                tempString = tempString + '4' + 'E' + 'B' + 'A' + d4v1 + ':'
+                //Will tell the board the value of the mid.
+                tempString = tempString + '4' + 'E' + 'M' + 'I' + d4v2 + ':'
+                //Will tell the board the value of the bass.
+                tempString = tempString + '4' + 'E' + 'T' + 'R' + d4v3 + '#'
+            }else if(effect4rec.state == "volume"){
+                //Will tell the board that the effect in the fourth box should be volume.
+                tempString = tempString + 'S' + '4' + 'E' + '3' + 'V' + 'O' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the gain.
+                tempString = tempString + '4' + 'V' + 'G' + 'A' + d4v1 + '#'
+            }else if(effect4rec.state == "delay"){
+                //Will tell the board that the effect in the fourth box should be delay.
+                tempString = tempString + 'S' + '4' + 'E' + '4' + 'D' + 'E' + '0' + '0' + '0' + '0' + ':'
+                //Will tell the board the value of the delay time.
+                tempString = tempString + '4' + 'D' + 'D' + 'T' + d4v1 + ':'
+                //Will tell the board the value of the gain.
+                tempString = tempString + '4' + 'D' + 'G' + 'A' + d4v2 + ':'
+                //Will tell the board the value of the feedback.
+                tempString = tempString + '4' + 'D' + 'F' + 'B' + d4v3 + '#'
+            }else if(effect4rec.state == "noEffect"){
+                //Will tell the board that the effect in the fourth box should be noeffect.
+                tempString = tempString + 'S' + '4' + 'E' + '1' + 'N' + 'E' + '0' + '0' + '0' + '0' + '#'
+                //No values are used here.
+            }else{
+                //Will tell the board that the effect in the fourth box should be bypassed.
+                tempString = tempString + 'S' + '4' + 'E' + '0' + 'B' + 'Y' + '0' + '0' + '0' + '0' + '#'
+                //No values are used here.
+            }
+            //Sending the string created to the board.
+            serialC.sendDataDe(tempString)
+            //Clears the string used to store the message send to the board.
+            tempString = ""
+            sendAll = false
         }
     }
     //Used in the debug window.
@@ -412,6 +587,7 @@ Rectangle {
             //Clears the string used to store the message send to the board.
             tempString = ""
             receive = true
+            changedEffect = 0
         }
     }
 
@@ -467,15 +643,15 @@ Rectangle {
                 delay1.checked = true
                 if(serialR.get(0).ds1val1 == "change"){
                     //Sets the first delay setting
-                    dE1.delayStart = serialR.get(0).dsp1val1
+                    dE1.delayStart = serialR.get(0).dsp1val1/1000
                 }
                 if(serialR.get(0).ds1val2 == "change"){
                     //Sets the second delay setting
-                    dE1.gainStart = serialR.get(0).dsp1val2 / 32768
+                    dE1.gainStart = (serialR.get(0).dsp1val2 / 32768)
                 }
                 if(serialR.get(0).ds1val3 == "change"){
                     //Sets the third delay setting
-                    dE1.feedbackStart = serialR.get(0).dsp1val3  / 32768
+                    dE1.feedbackStart = (serialR.get(0).dsp1val3  / 32768)
                 }
             }
             //----------------------volume---------------------------------------
@@ -532,15 +708,15 @@ Rectangle {
                 delay2.checked = true
                 if(serialR.get(0).ds2val1 == "change"){
                     //Sets the first delay setting
-                    dE2.delayStart = serialR.get(0).dsp2val1
+                    dE2.delayStart = serialR.get(0).dsp2val1/1000
                 }
                 if(serialR.get(0).ds2val2 == "change"){
                     //Sets the second delay setting
-                    dE2.gainStart = serialR.get(0).dsp2val2 / 32768
+                    dE2.gainStart = (serialR.get(0).dsp2val2 / 32768)
                 }
                 if(serialR.get(0).ds2val3 == "change"){
                     //Sets the third delay setting
-                    dE2.feedbackStart = serialR.get(0).dsp2val3  / 32768
+                    dE2.feedbackStart = (serialR.get(0).dsp2val3  / 32768)
                 }
             }
             //----------------------volume---------------------------------------
@@ -597,15 +773,15 @@ Rectangle {
                 delay3.checked = true
                 if(serialR.get(0).ds3val1 == "change"){
                     //Sets the first delay setting
-                    dE3.delayStart = serialR.get(0).dsp3val1
+                    dE3.delayStart = serialR.get(0).dsp3val1/1000
                 }
                 if(serialR.get(0).ds3val2 == "change"){
                     //Sets the second delay setting
-                    dE3.gainStart = serialR.get(0).dsp3val2 / 32768
+                    dE3.gainStart = (serialR.get(0).dsp3val2 / 32768)
                 }
                 if(serialR.get(0).ds3val3 == "change"){
                     //Sets the third delay setting
-                    dE3.feedbackStart = serialR.get(0).dsp3val3  / 32768
+                    dE3.feedbackStart = (serialR.get(0).dsp3val3  / 32768)
                 }
             }
             //----------------------volume---------------------------------------
@@ -662,15 +838,15 @@ Rectangle {
                 delay4.checked = true
                 if(serialR.get(0).ds4val1 == "change"){
                     //Sets the first delay setting
-                    dE4.delayStart = serialR.get(0).dsp4val1
+                    dE4.delayStart = serialR.get(0).dsp4val1/1000
                 }
                 if(serialR.get(0).ds4val2 == "change"){
                     //Sets the second delay setting
-                    dE4.gainStart = serialR.get(0).dsp4val2 / 32768
+                    dE4.gainStart = (serialR.get(0).dsp4val2 / 32768)
                 }
                 if(serialR.get(0).ds4val3 == "change"){
                     //Sets the third delay setting
-                    dE4.feedbackStart = serialR.get(0).dsp4val3  / 32768
+                    dE4.feedbackStart = (serialR.get(0).dsp4val3  / 32768)
                 }
             }
             //----------------------volume---------------------------------------
@@ -684,6 +860,7 @@ Rectangle {
                     vE4.sValue = serialR.get(0).dsp4val1 * -1
                 }
             }
+            serialR.clear()
             receive = false
         }
 
@@ -731,7 +908,7 @@ Rectangle {
             y: 0
             width: 93
             height: 29
-            text: inTexter
+            text: vE1.curValue
             font.pixelSize: 24
         }
         Text {
@@ -739,7 +916,7 @@ Rectangle {
             x: 300
             y: 50
             width: 200
-            text: tempString
+            text: vE1.sValue
             font.pixelSize: 24
         }
         //This item will changed later.
@@ -1018,7 +1195,7 @@ Rectangle {
                                     eE1.bassStart = presetModel.get(index).dsp1val1
                                     eE1.midrangeStart = presetModel.get(index).dsp1val2
                                     eE1.trebleStart = presetModel.get(index).dsp1val3
-                                }else if(presetModel.get(index).dsp1name== "volume"){
+                                }else if(presetModel.get(index).dsp1name == "volume"){
                                     volume1.checked = true
                                     effect1rec.state = "volume"
                                     vE1.sValue = presetModel.get(index).dsp1val1 * -1
@@ -1114,6 +1291,9 @@ Rectangle {
                                 //Prints the number of available presets.
                                 console.log("List Size: "+presetList.count+"\n")
                             }
+                            //So that not all the value changes are sent.
+                            receive = false
+                            sendAll = true
                         }
                     }
                 }
