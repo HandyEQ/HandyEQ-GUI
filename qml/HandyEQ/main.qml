@@ -41,7 +41,7 @@ Rectangle {
     property string d3v1: serialC.valToChar(dsp3val1)
     property string d3v2: {if(effect3rec.state == "delay")serialC.valToChar((dsp3val2/1000)*32768);else serialC.valToChar(dsp3val2);}
     property string d3v3: {if(effect3rec.state == "delay")serialC.valToChar((dsp3val3/1000)*32768);else serialC.valToChar(dsp3val3);}
-    //For the forth effect.
+    //For the fourth effect.
     property string d4v1: serialC.valToChar(dsp1val1)
     property string d4v2: {if(effect4rec.state == "delay")serialC.valToChar((dsp4val2/1000)*32768);else serialC.valToChar(dsp4val2);}
     property string d4v3: {if(effect4rec.state == "delay")serialC.valToChar((dsp4val3/1000)*32768);else serialC.valToChar(dsp4val3);}
@@ -70,7 +70,7 @@ Rectangle {
     property int dsp3val2: {if(dsp3name == "equalizer")eE3.midrange;else if(dsp3name == "volume")0;else if(dsp3name == "delay")dE3.curGain*1000;else 0}
     property int dsp3val3: {if(dsp3name == "equalizer")eE3.treble;else if(dsp3name == "volume")0;else if(dsp3name == "delay")dE3.curFeedback*1000;else 0}
 
-    //Values used to store the current forth effects and its values.
+    //Values used to store the current fourth effects and its values.
     property string dsp4name: effect4rec.dsp4State
     //If the delay is the active effect the first value (the delay) will be stored in ms instead of in s, other values are stored in their normal form.
     property int dsp4val1: {if(dsp4name == "equalizer")eE4.bass;else if(dsp4name == "volume")vE4.curValue;else if(dsp4name == "delay")dE4.curDelay*1000;else 0}
@@ -796,24 +796,24 @@ Rectangle {
                 }
             }
             //-------------------------------------------------------------------
-            //-----------Determines the forth box and its settings.--------------
+            //-----------Determines the fourth box and its settings.--------------
             //-------------------------------------------------------------------
             //----------------------Bypass---------------------------------------
             if(serialR.get(0).d4name == "byPass"){
-                //Determins that the forth effect is bypassed.
+                //Determins that the fourth effect is bypassed.
                 effect4rec.state = "byPass"
                 menuEff4.state = "byPass"
             }
             //----------------------NoEffect-------------------------------------
             if(serialR.get(0).d4name == "noEffect"){
-                //Determins that the forth effect is no effect.
+                //Determins that the fourth effect is no effect.
                 effect4rec.state = "noEffect"
                 menuEff4.state = "effect"
                 noEff4.checked = true
             }
             //----------------------Equalizer------------------------------------
             if(serialR.get(0).d4name == "equalizer"){
-                //Determins that the forth effect is the equalizer.
+                //Determins that the fourth effect is the equalizer.
                 effect4rec.state = "equalizer"
                 menuEff4.state = "effect"
                 equal4.checked = true
@@ -832,7 +832,7 @@ Rectangle {
             }
             //----------------------Delay----------------------------------------
             if(serialR.get(0).d4name == "delay"){
-                //Determins that the forth effect is the delay.
+                //Determins that the fourth effect is the delay.
                 effect4rec.state = "delay"
                 menuEff4.state = "effect"
                 delay4.checked = true
@@ -851,7 +851,7 @@ Rectangle {
             }
             //----------------------volume---------------------------------------
             if(serialR.get(0).d4name == "volume"){
-                //Determins that the forth effect is volume.
+                //Determins that the fourth effect is volume.
                 effect4rec.state = "volume"
                 menuEff4.state = "effect"
                 volume4.checked = true
@@ -898,7 +898,11 @@ Rectangle {
             height: 100
 
             onClicked: {
-                baseWindow.state = "debug"
+                if(baseWindow.state == "gui"){
+                    baseWindow.state = "start"
+                }else if(baseWindow.state == "start"){
+                    baseWindow.state = "gui"
+                }
             }
         }
         //These text areas are used for testing and needs to be removed later.
@@ -908,7 +912,7 @@ Rectangle {
             y: 0
             width: 93
             height: 29
-            text: vE1.curValue
+            text: ""
             font.pixelSize: 24
         }
         Text {
@@ -916,7 +920,7 @@ Rectangle {
             x: 300
             y: 50
             width: 200
-            text: vE1.sValue
+            text: ""
             font.pixelSize: 24
         }
         //This item will changed later.
@@ -937,7 +941,7 @@ Rectangle {
                 height: 80
                 radius: 1
                 border.width: 2
-                property string eff1: {if(menuEff1.state == "byPass")"byPass";else"effect";}
+                property string eff1: {if(menuEff1.state == "byPass")"bypass";else"effect";}
                 state: "byPass"
 
                 MouseArea {
@@ -988,7 +992,7 @@ Rectangle {
                 height: 80
                 radius: 1
                 border.width: 2
-                property string eff2: {if(menuEff2.state == "byPass")"byPass";else"effect";}
+                property string eff2: {if(menuEff2.state == "byPass")"bypass";else"effect";}
                 state: "byPass"
 
                 MouseArea {
@@ -1039,7 +1043,7 @@ Rectangle {
                 height: 80
                 radius: 1
                 border.width: 2
-                property string eff3: {if(menuEff3.state == "byPass")"byPass";else"effect";}
+                property string eff3: {if(menuEff3.state == "byPass")"bypass";else"effect";}
                 state: "byPass"
 
                 MouseArea {
@@ -1090,11 +1094,11 @@ Rectangle {
                 height: 80
                 radius: 1
                 border.width: 2
-                property string eff4: {if(menuEff4.state == "byPass")"byPass";else"effect";}
+                property string eff4: {if(menuEff4.state == "byPass")"bypass";else"effect";}
                 state: "byPass"
 
                 MouseArea {
-                    //When this is clicked it toggles the state of the forth effect between using effects and bypassing them.
+                    //When this is clicked it toggles the state of the fourth effect between using effects and bypassing them.
                     x: 0
                     y: 0
                     width: menuEff4.width
@@ -1102,7 +1106,7 @@ Rectangle {
 
                     onClicked: {
                         if(menuEff4.state == "byPass"){
-                            //Sets the forth effect to active.
+                            //Sets the fourth effect to active.
                             menuEff4.state = "effect"
                             //This part makes sure that that the correct effect is active.
                             if(noEff4.checked){
@@ -1115,14 +1119,14 @@ Rectangle {
                                 effect4rec.state = "delay"
                             }
                         }else if(menuEff4.state == "effect"){
-                            //Sets the forth effect to bypassed.
+                            //Sets the fourth effect to bypassed.
                             menuEff4.state = "byPass"
                             effect4rec.state = "byPass"
                         }
                     }
                 }
                 Text {
-                    //Displays whether the forth effect is bypassed of not.
+                    //Displays whether the fourth effect is bypassed of not.
                     id: eff4t
                     width: 150
                     height: 80
@@ -2736,7 +2740,7 @@ Rectangle {
             ]
         }
         Rectangle {
-            //This is where the forth effects settings are displayed and chosen.
+            //This is where the fourth effects settings are displayed and chosen.
             id: effect4rec
             x: contentContainer.width/2
             y: contentContainer.height/2
@@ -2750,7 +2754,7 @@ Rectangle {
             property string dsp4State: effect4rec.state
 
             Bypass {
-                //Creating the bypass area for the forth effect box.
+                //Creating the bypass area for the fourth effect box.
                 id: bE4
                 x: 1
                 y: 1
@@ -2758,25 +2762,25 @@ Rectangle {
                 opacity: 0.8
             }
             NoEffect{
-                //Creating the no effect area for the forth effect box.
+                //Creating the no effect area for the fourth effect box.
                 id: nE4
                 z: 0
                 opacity: 1
             }
             Equalizer{
-                //Creating the equalizer area for the forth effect box.
+                //Creating the equalizer area for the fourth effect box.
                 id: eE4
                 z: 0
                 opacity: 0
             }
             Delay{
-                //Creating the delay area for the forth effect box.
+                //Creating the delay area for the fourth effect box.
                 id: dE4
                 z: 0
                 opacity: 0
             }
             GenericGainSlider{
-                //Creating the volume area for the forth effect box.
+                //Creating the volume area for the fourth effect box.
                 id: vE4
                 x: 40
                 y: 60
@@ -2786,7 +2790,7 @@ Rectangle {
             }
 
             Item {
-                //Menu for chosing the forth effect if the forth box is not bypassed.
+                //Menu for chosing the fourth effect if the fourth box is not bypassed.
                 id: dsp4menu
                 x: 481
                 y: 1
@@ -2798,7 +2802,7 @@ Rectangle {
                     id: excmenu4
                 }
                 RadioButton {
-                    //This is used when chosing no effect for the forth box.
+                    //This is used when chosing no effect for the fourth box.
                     id: noEff4
                     exclusiveGroup: excmenu4
                     x: 28
@@ -2814,7 +2818,7 @@ Rectangle {
                     }
                 }
                 RadioButton {
-                    //This is used when chosing equalizer for the forth box.
+                    //This is used when chosing equalizer for the fourth box.
                     id: equal4
                     exclusiveGroup: excmenu4
                     x: 28
@@ -2829,7 +2833,7 @@ Rectangle {
                     }
                 }
                 RadioButton {
-                    //This is used when chosing volume for the forth box.
+                    //This is used when chosing volume for the fourth box.
                     id: volume4
                     exclusiveGroup: excmenu4
                     x: 28
@@ -2844,7 +2848,7 @@ Rectangle {
                     }
                 }
                 RadioButton {
-                    //This is used when chosing delay for the forth box.
+                    //This is used when chosing delay for the fourth box.
                     id: delay4
                     exclusiveGroup: excmenu4
                     x: 28

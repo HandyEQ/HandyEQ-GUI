@@ -29,6 +29,7 @@ public:
     //These send funcions will be used to send data on the serial port
     //either as a Json object or as a string.
     Q_INVOKABLE bool sendData(const QJsonObject &object);
+    //This is the send function used in the QML file, since Json format is not being used.
     Q_INVOKABLE bool sendDataDe(const QString outData);
     //These functions are used to chose what port to use, to set it up and to open/close it.
     Q_INVOKABLE QJsonArray getPortList();
@@ -42,6 +43,7 @@ public:
     //Used to store the data read from the serial port as either Json or a string the string cannot contain [ or ]
     //if it does it will be interpeted as a Json object.
     QJsonArray inData;
+    //This variable is not bing used.
     QString inDataString;
     //Contains the information of the port, this is needed to open a port and to read write to it.
     QSerialPort* mPort;
@@ -52,7 +54,7 @@ public:
     //bool portOpen;
 
 
-    //These functions allows the values mPort, inData and inDataString to be read into the QML file.
+    //These functions allows the values mPort and inDatan to be read into the QML file.
     QSerialPort* port()
     {
         return mPort;
@@ -60,6 +62,7 @@ public:
     QJsonArray inDatan(){
         return inData;
     }
+    //This is currently not used, was ment to be used for the debug window
     QString inDataStringn(){
         return inDataString;
     }

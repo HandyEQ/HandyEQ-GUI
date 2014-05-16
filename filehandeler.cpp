@@ -1,11 +1,12 @@
 #include "filehandeler.h"
 #include <QObject>
 #include <QFile>
-#include <QTextStream>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QDebug>
+//Not used libraries.
+//#include <QTextStream>
 
 FileHandeler::FileHandeler(QObject *parent) : QObject(parent)
 {

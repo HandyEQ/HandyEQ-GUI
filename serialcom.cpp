@@ -5,10 +5,10 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSerialPort>
-#include <stdio.h>
 //Not currently used.
-#include <QFuture>
-#include <QtConcurrent/QtConcurrent>
+//#include <QFuture>
+//#include <QtConcurrent/QtConcurrent>
+//#include <stdio.h>
 
 //This variable is used to temporary store the read Json string before it is completed.
 QString inD;
@@ -266,7 +266,7 @@ void SerialCom::read(){
                     tempJson.append("\"d3name\": \"delay\"");
                 }
             }else if(inD.at(1) == '4'){
-                //If the forth effect is changed.
+                //If the fourth effect is changed.
                 if(inD.at(3) == '0'){
                     //Effect bypassed.
                     tempJson.append("\"d4name\": \"byPass\"");
@@ -447,7 +447,7 @@ void SerialCom::read(){
                 //These settings should be made with the settings box.
             }
         }else if(inD.at(0) == '4'){
-            //Change the settings for the forth effect.
+            //Change the settings for the fourth effect.
             if(inD.at(1) == 'D'){
                 //Delay settings.
                 if(inD.at(2) == 'D'){
@@ -733,169 +733,9 @@ QString SerialCom::valToChar(int val){
 //This function will convert from 6 chars with a sign on the left into an int value.-11111
 int charToInt(QString tempS){
     int i;
+    //Converts the string into an integer.
     i = tempS.toInt();
-    /*
-    //Looks what the first chars value is.
-    if(tempS.at(1) == '9'){
-        //If the value is 90000.
-        i = i + 90000;
-    }else if(tempS.at(1) == '8'){
-        //If the value is 80000.
-        i = i + 80000;
-    }else if(tempS.at(1) == '7'){
-        //If the value is 70000.
-        i = i + 70000;
-    }else if(tempS.at(1) == '6'){
-        //If the value is 60000.
-        i = i + 60000;
-    }else if(tempS.at(1) == '5'){
-        //If the value is 50000.
-        i = i + 50000;
-    }else if(tempS.at(1) == '4'){
-        //If the value is 40000.
-        i = i + 40000;
-    }else if(tempS.at(1) == '3'){
-        //If the value is 30000.
-        i = i + 30000;
-    }else if(tempS.at(1) == '2'){
-        //If the value is 20000.
-        i = i + 20000;
-    }else if(tempS.at(1) == '1'){
-        //If the value is 10000.
-        i = i + 10000;
-    }else{
-        //The value is less than 10000
-    }
-    //Looks what the second chars value is.
-    if(tempS.at(2) == '9'){
-        //If the value is 9000.
-        i = i + 9000;
-    }else if(tempS.at(2) == '8'){
-        //If the value is 8000.
-        i = i + 8000;
-    }else if(tempS.at(2) == '7'){
-        //If the value is 7000.
-        i = i + 7000;
-    }else if(tempS.at(2) == '6'){
-        //If the value is 6000.
-        i = i + 6000;
-    }else if(tempS.at(2) == '5'){
-        //If the value is 5000.
-        i = i + 5000;
-    }else if(tempS.at(2) == '4'){
-        //If the value is 4000.
-        i = i + 4000;
-    }else if(tempS.at(2) == '3'){
-        //If the value is 3000.
-        i = i + 3000;
-    }else if(tempS.at(2) == '2'){
-        //If the value is 2000.
-        i = i + 2000;
-    }else if(tempS.at(2) == '1'){
-        //If the value is 1000.
-        i = i + 1000;
-    }else{
-        //The value is less than 1000
-    }
-    //Looks what the third chars value is.
-    if(tempS.at(3) == '9'){
-        //If the value is 900.
-        i = i + 900;
-    }else if(tempS.at(3) == '8'){
-        //If the value is 800.
-        i = i + 800;
-    }else if(tempS.at(3) == '7'){
-        //If the value is 700.
-        i = i + 700;
-    }else if(tempS.at(3) == '6'){
-        //If the value is 600.
-        i = i + 600;
-    }else if(tempS.at(3) == '5'){
-        //If the value is 500.
-        i = i + 500;
-    }else if(tempS.at(3) == '4'){
-        //If the value is 400.
-        i = i + 400;
-    }else if(tempS.at(3) == '3'){
-        //If the value is 300.
-        i = i + 300;
-    }else if(tempS.at(3) == '2'){
-        //If the value is 200.
-        i = i + 200;
-    }else if(tempS.at(3) == '1'){
-        //If the value is 100.
-        i = i + 100;
-    }else{
-        //The value is less than 100
-    }
-    //Looks what the forth chars value is.
-    if(tempS.at(4) == '9'){
-        //If the value is 90.
-        i = i + 90;
-    }else if(tempS.at(4) == '8'){
-        //If the value is 80.
-        i = i + 80;
-    }else if(tempS.at(4) == '7'){
-        //If the value is 70.
-        i = i + 70;
-    }else if(tempS.at(4) == '6'){
-        //If the value is 60.
-        i = i + 60;
-    }else if(tempS.at(4) == '5'){
-        //If the value is 50.
-        i = i + 50;
-    }else if(tempS.at(4) == '4'){
-        //If the value is 40.
-        i = i + 40;
-    }else if(tempS.at(4) == '3'){
-        //If the value is 30.
-        i = i + 30;
-    }else if(tempS.at(4) == '2'){
-        //If the value is 20.
-        i = i + 20;
-    }else if(tempS.at(4) == '1'){
-        //If the value is 10.
-        i = i + 10;
-    }else{
-        //The value is less than 10
-    }
-    //Looks what the fifth chars value is.
-    if(tempS.at(5) == '9'){
-        //If the value is 9.
-        i = i + 9;
-    }else if(tempS.at(5) == '8'){
-        //If the value is 8.
-        i = i + 8;
-    }else if(tempS.at(5) == '7'){
-        //If the value is 7.
-        i = i + 7;
-    }else if(tempS.at(5) == '6'){
-        //If the value is 6.
-        i = i + 6;
-    }else if(tempS.at(5) == '5'){
-        //If the value is 5.
-        i = i + 5;
-    }else if(tempS.at(5) == '4'){
-        //If the value is 4.
-        i = i + 4;
-    }else if(tempS.at(5) == '3'){
-        //If the value is 3.
-        i = i + 3;
-    }else if(tempS.at(5) == '2'){
-        //If the value is 2.
-        i = i + 2;
-    }else if(tempS.at(5) == '1'){
-        //If the value is 1.
-        i = i + 1;
-    }else{
-        //The value is less than 1
-    }
-    if(tempS.at(0) == '-'){
-        //The value is negative.
-        i = i * (-1);
-    }else{
-        //The value is positive.
-    }*/
+    //Returns the converted integer.
     return i;
 }
 
