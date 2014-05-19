@@ -610,14 +610,14 @@ Rectangle {
                 menuEff1.state = "byPass"
             }
             //----------------------NoEffect-------------------------------------
-            if(serialR.get(0).d1name == "noEffect"){
+            else if(serialR.get(0).d1name == "noEffect"){
                 //Determins that the first effect is no effect.
                 effect1rec.state = "noEffect"
                 menuEff1.state = "effect"
                 noEff1.checked = true
             }
             //----------------------Equalizer------------------------------------
-            if(serialR.get(0).d1name == "equalizer"){
+            else if(serialR.get(0).d1name == "equalizer"){
                 //Determins that the first effect is the equalizer.
                 effect1rec.state = "equalizer"
                 menuEff1.state = "effect"
@@ -636,7 +636,7 @@ Rectangle {
                 }
             }
             //----------------------Delay----------------------------------------
-            if(serialR.get(0).d1name == "delay"){
+            else if(serialR.get(0).d1name == "delay"){
                 //Determins that the first effect is the delay.
                 effect1rec.state = "delay"
                 menuEff1.state = "effect"
@@ -655,7 +655,7 @@ Rectangle {
                 }
             }
             //----------------------volume---------------------------------------
-            if(serialR.get(0).d1name == "volume"){
+            else if(serialR.get(0).d1name == "volume"){
                 //Determins that the first effect is volume.
                 effect1rec.state = "volume"
                 menuEff1.state = "effect"
@@ -665,6 +665,7 @@ Rectangle {
                     vE1.sValue = serialR.get(0).dsp1val1 * -1
                 }
             }
+
             //-------------------------------------------------------------------
             //-----------Determines the second box and its settings.-------------
             //-------------------------------------------------------------------
@@ -675,14 +676,14 @@ Rectangle {
                 menuEff2.state = "byPass"
             }
             //----------------------NoEffect-------------------------------------
-            if(serialR.get(0).d2name ==  "noEffect"){
+            else if(serialR.get(0).d2name ==  "noEffect"){
                 //Determins that the second effect is no effect.
                 effect2rec.state = "noEffect"
                 menuEff2.state = "effect"
                 noEff2.checked = true
             }
             //----------------------Equalizer------------------------------------
-            if(serialR.get(0).d2name == "equalizer"){
+            else if(serialR.get(0).d2name == "equalizer"){
                 //Determins that the second effect is the equalizer.
                 effect2rec.state = "equalizer"
                 menuEff2.state = "effect"
@@ -701,7 +702,7 @@ Rectangle {
                 }
             }
             //----------------------Delay----------------------------------------
-            if(serialR.get(0).d2name == "delay"){
+            else if(serialR.get(0).d2name == "delay"){
                 //Determins that the second effect is the delay.
                 effect2rec.state = "delay"
                 menuEff2.state = "effect"
@@ -720,7 +721,7 @@ Rectangle {
                 }
             }
             //----------------------volume---------------------------------------
-            if(serialR.get(0).d2name == "volume"){
+            else if(serialR.get(0).d2name == "volume"){
                 //Determins that the second effect is volume.
                 effect2rec.state = "volume"
                 menuEff2.state = "effect"
@@ -740,14 +741,14 @@ Rectangle {
                 menuEff3.state = "byPass"
             }
             //----------------------NoEffect-------------------------------------
-            if(serialR.get(0).d3name == "noEffect"){
+            else if(serialR.get(0).d3name == "noEffect"){
                 //Determins that the third effect is no effect.
                 effect3rec.state = "noEffect"
                 menuEff3.state = "effect"
                 noEff3.checked = true
             }
             //----------------------Equalizer------------------------------------
-            if(serialR.get(0).d3name == "equalizer"){
+            else if(serialR.get(0).d3name == "equalizer"){
                 //Determins that the third effect is the equalizer.
                 effect3rec.state = "equalizer"
                 menuEff3.state = "effect"
@@ -766,7 +767,7 @@ Rectangle {
                 }
             }
             //----------------------Delay----------------------------------------
-            if(serialR.get(0).d3name == "delay"){
+            else if(serialR.get(0).d3name == "delay"){
                 //Determins that the third effect is the delay.
                 effect3rec.state = "delay"
                 menuEff3.state = "effect"
@@ -785,7 +786,7 @@ Rectangle {
                 }
             }
             //----------------------volume---------------------------------------
-            if(serialR.get(0).d3name == "volume"){
+            else if(serialR.get(0).d3name == "volume"){
                 //Determins that the third effect is volume.
                 effect3rec.state = "volume"
                 menuEff3.state = "effect"
@@ -805,14 +806,14 @@ Rectangle {
                 menuEff4.state = "byPass"
             }
             //----------------------NoEffect-------------------------------------
-            if(serialR.get(0).d4name == "noEffect"){
+            else if(serialR.get(0).d4name == "noEffect"){
                 //Determins that the fourth effect is no effect.
                 effect4rec.state = "noEffect"
                 menuEff4.state = "effect"
                 noEff4.checked = true
             }
             //----------------------Equalizer------------------------------------
-            if(serialR.get(0).d4name == "equalizer"){
+            else if(serialR.get(0).d4name == "equalizer"){
                 //Determins that the fourth effect is the equalizer.
                 effect4rec.state = "equalizer"
                 menuEff4.state = "effect"
@@ -831,7 +832,7 @@ Rectangle {
                 }
             }
             //----------------------Delay----------------------------------------
-            if(serialR.get(0).d4name == "delay"){
+            else if(serialR.get(0).d4name == "delay"){
                 //Determins that the fourth effect is the delay.
                 effect4rec.state = "delay"
                 menuEff4.state = "effect"
@@ -850,7 +851,7 @@ Rectangle {
                 }
             }
             //----------------------volume---------------------------------------
-            if(serialR.get(0).d4name == "volume"){
+            else if(serialR.get(0).d4name == "volume"){
                 //Determins that the fourth effect is volume.
                 effect4rec.state = "volume"
                 menuEff4.state = "effect"

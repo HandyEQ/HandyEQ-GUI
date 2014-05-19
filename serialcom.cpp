@@ -198,13 +198,13 @@ void SerialCom::read(){
             //Creates the first part of the Jsonarray.
             tempJson.append("[{");
             //Tells the QML file that the effect settings have not changed.
-            tempJson.append("\"ds1val1\": \"noChange\", \"ds1val2\": \"noChange\", \"ds1val3\": \"noChange\",");
+            //tempJson.append("\"ds1val1\": \"noChange\", \"ds1val2\": \"noChange\", \"ds1val3\": \"noChange\",");
             //Tells the QML file that the effect settings have not changed.
-            tempJson.append("\"ds2val1\": \"noChange\", \"ds2val2\": \"noChange\", \"ds2val3\": \"noChange\",");
+            //tempJson.append("\"ds2val1\": \"noChange\", \"ds2val2\": \"noChange\", \"ds2val3\": \"noChange\",");
             //Tells the QML file that the effect settings have not changed.
-            tempJson.append("\"ds3val1\": \"noChange\", \"ds3val2\": \"noChange\", \"ds3val3\": \"noChange\",");
+            //tempJson.append("\"ds3val1\": \"noChange\", \"ds3val2\": \"noChange\", \"ds3val3\": \"noChange\",");
             //Tells the QML file that the effect settings have not changed.
-            tempJson.append("\"ds4val1\": \"noChange\", \"ds4val2\": \"noChange\", \"ds4val3\": \"noChange\",");
+            //tempJson.append("\"ds4val1\": \"noChange\", \"ds4val2\": \"noChange\", \"ds4val3\": \"noChange\",");
             //A temproary string containing a Jsonarray has been started.
             JsonC = 0;
         }
