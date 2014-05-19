@@ -17,7 +17,7 @@ class FileHandeler : public QObject
         explicit FileHandeler(QObject *parent = 0);
 
         Q_INVOKABLE QJsonArray read();
-        Q_INVOKABLE bool write(const QString &name, const qint32 &value);
+        Q_INVOKABLE bool write(const QJsonObject &object);
 
         QString source()
         {
