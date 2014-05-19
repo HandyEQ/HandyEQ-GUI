@@ -16,22 +16,27 @@ class FileHandeler : public QObject
                    NOTIFY sourceChanged)
         explicit FileHandeler(QObject *parent = 0);
 
+        //These functions are used to read, write and remove objects from the set source file.
         Q_INVOKABLE QJsonArray read();
         Q_INVOKABLE bool write(const QJsonObject &object);
-
+        Q_INVOKABLE bool remove(int r);
+        //This function returns the source.
         QString source()
         {
             return mSource;
         }
 
     public slots:
+        //This function sets the source.
         void setSource(const QString &source)
         {
             mSource = source;
         }
 
     signals:
+        //This signal is not used.
         void sourceChanged(const QString &source);
+        //This signal is generated when an error occurs.
         void error(const QString &msg);
 
     private:

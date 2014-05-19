@@ -5,6 +5,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QDebug>
+//Not used libraries.
+//#include <QTextStream>
 
 FileHandeler::FileHandeler(QObject *parent) : QObject(parent)
 {
@@ -91,6 +93,49 @@ bool FileHandeler::write(const QJsonObject &object)
         file.write(output.toUtf8());
         file.resize(file.pos());
 
+        //close and return sucessful save
+        file.close();
+        return true;
+    }
+}
+
+bool FileHandeler::remove(int r)
+{
+    //Set input file
+    QFile file(mSource);
+
+    //check if there is a source file set and if the file is opened
+    if (mSource.isEmpty() || !file.open(QFile::ReadWrite | QIODevice::Text)){
+        return false;
+    }
+    // If everything is ok then start writing to file
+    else {
+        //Create JSONDoc from file content
+        QString input = file.readAll();
+        qDebug() << input;
+        //Read file
+        //Create JSONDoc from file content
+        QJsonDocument doc = QJsonDocument::fromJson(input.toUtf8());
+        //Create JSONArray and JSONObject
+        QJsonArray arr = doc.array();
+        //QJsonObject obj;
+        //set JSONArray to content of JSONDoc
+        qDebug() << "Reading file";
+        qDebug() << arr.size();
+        //input values into JSONObject
+        //obj.insert("name",name);
+        //obj.insert("delay",value);
+        //Removes the JSONObject at index r.
+        arr.removeAt(r);
+        //Set JSONArray to content of JSONDoc
+        doc.setArray(arr);
+        //Write data to doc
+        QString output = doc.toJson();
+        qDebug() << "Output to file";
+        qDebug() << output;
+        file.seek(0);
+        file.write(output.toUtf8());
+        file.resize(file.pos());
         //close and return sucessful save
         file.close();
         return true;
